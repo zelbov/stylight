@@ -20,9 +20,9 @@
   "license": "MIT",
   "sideEffects": false,
   "bugs": {
-    "url": "https://github.com/zelbov/binpacket/issues"
+    "url": "https://github.com/zelbov/stylight/issues"
   },
-  "homepage": "https://github.com/zelbov/binpacket#readme",
+  "homepage": "https://github.com/zelbov/stylight#readme",
   "_moduleAliases": {
     "stylight": "dist/src/index.js"
   },
