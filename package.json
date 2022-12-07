@@ -1,0 +1,52 @@
+{
+  "name": "stylight",
+  "version": "0.0.1",
+  "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "npx webpack --config ./webpack.config.js --mode=production && npx tsc",
+    "bundle-dev": "npx webpack --config ./webpack.config.js --mode=development",
+    "watch": "npx tsc --watch",
+    "lint": "npx eslint --ext ts",
+    "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/unit/*.js --no-deprecation"
+  },
+  "keywords": [
+    "css-in-js",
+    "react",
+    "css",
+    "styles"
+  ],
+  "author": "Zelbov",
+  "license": "MIT",
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/zelbov/binpacket/issues"
+  },
+  "homepage": "https://github.com/zelbov/binpacket#readme",
+  "_moduleAliases": {
+    "stylight": "dist/src/index.js"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "chai": "^4.3.7",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-webpack-plugin": "^3.2.0",
+    "mocha": "^10.1.0",
+    "module-alias": "^2.2.2",
+    "react": "^18.2.0",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.3",
+    "webpack-cli": "^5.0.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "dependencies": {
+    "csstype": "^3.1.1"
+  }
+}

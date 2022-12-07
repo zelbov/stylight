@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "stylight": ["./src"],
+        },
+        "strict": true,
+        "removeComments": false,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "sourceMap": true,
+        "declaration": true,
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "jsx": "react"
+    },
+    "include": ["./src", "./test"],
+    "exclude": ["dist", "node_modules", ".trash"]
+}
