@@ -5,8 +5,8 @@
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
-            "stylight": ["./src"],
-            "stylight/react": ["./src/react"]
+            "stylight": ["./src/index.ts"],
+            "stylight/react": ["./src/react/react.ts"]
         },
         "strict": true,
         "removeComments": false,

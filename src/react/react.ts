@@ -119,3 +119,8 @@ export const StyleRenderer = (props: StyleRendererProps) => {
     return createElement('style', { dangerouslySetInnerHTML: { __html: contents } })
 
 }
+
+module.exports = { StyleRenderer, useStyle, StyleRenderingContext, createStyleRenderingContext }
+
+//@ts-ignore
+global.StylightReact = module.exports // UMD

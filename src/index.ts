@@ -7,4 +7,4 @@ export { renderStyleSheet, renderMixins, styledClass }
 module.exports = { renderStyleSheet, renderMixins, styledClass }
 
 //@ts-ignore
-global.Stylight = module.exports
+global.Stylight = module.exports // UMD

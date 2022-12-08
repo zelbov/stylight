@@ -44,7 +44,7 @@ module.exports = function(env, args) {
         },
         output: {
             filename: `stylight${ args.mode == 'production' ? '.min' : ''}.js`,
-            path: __dirname+'/dist'
+            path: __dirname+'/umd'
         },
 
     }
@@ -53,13 +53,13 @@ module.exports = function(env, args) {
 
         ...commonConfigs,
 
-        entry: './src/react/index.ts',
+        entry: './src/react/react.ts',
         optimization: {
             minimize: args.mode == 'production'
         },
         output: {
             filename: `stylight.react${ args.mode == 'production' ? '.min' : ''}.js`,
-            path: __dirname+'/dist'
+            path: __dirname+'/umd'
         },
         externals: {
             'stylight': 'Stylight',
