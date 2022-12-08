@@ -69,40 +69,44 @@ renderStyleSheet(styles)
 
 import { renderStyleSheet } from 'stylight'
 
-const gradient = {
+const styles = {
 
-    // msie
-    filter:
-    'progid:DXImageTransform.Microsoft.gradient(startColorstr="#23553f",endColorstr="#041316",GradientType=1)',
+    gradient: {
 
-    // overriding same property more than once:
-    overrides: [
-        
-        {
-            // fallback (no gradient support)
-            background: 'rgb(35,85,63)'
-        },
-        {
-            // moz
-            background:
-            '-moz-linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
-        },
-        {
-            // webkit
-            background:
-            '-webkit-linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
-        },
-        {
-            // common
-            background:
-            'linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
-        },
+        // msie
+        filter:
+        'progid:DXImageTransform.Microsoft.gradient(startColorstr="#23553f",endColorstr="#041316",GradientType=1)',
+    
+        // overriding same property more than once:
+        overrides: [
+            
+            {
+                // fallback (no gradient support)
+                background: 'rgb(35,85,63)'
+            },
+            {
+                // moz
+                background:
+                '-moz-linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
+            },
+            {
+                // webkit
+                background:
+                '-webkit-linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
+            },
+            {
+                // common
+                background:
+                'linear-gradient(50deg, rgba(35,85,63,1) 1%, rgba(50,127,131,1) 55%, rgba(4,19,22,1) 100%)'
+            },
+            
+        ],
 
-    ],
+    }
 
 }
 
-renderStyleSheet(gradient)
+renderStyleSheet(styles)
 
 /*
 
