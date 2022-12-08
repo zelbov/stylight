@@ -1,7 +1,11 @@
 /src
 /test
 /dist/test
+/dist/*.js
 tsconfig.json
 webpack.config.js
 .gitignore
+.git
 .eslintrc.js
+*.tgz
+
