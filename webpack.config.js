@@ -53,7 +53,7 @@ module.exports = function(env, args) {
 
         ...commonConfigs,
 
-        entry: './src/react/react.ts',
+        entry: './src/react/index.ts',
         optimization: {
             minimize: args.mode == 'production'
         },
