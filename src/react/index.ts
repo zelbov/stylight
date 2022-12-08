@@ -20,20 +20,37 @@ declare interface StyleContextListener {
 
 class StyleContextListener extends EventTarget {
 
-    constructor(){ super(); this._sources = [] }
+    constructor(){
+        super();
+        this._sources = [];
+        this._renderedFlags = [];
+        this._cache = ''
+    }
 
     private _sources: ThemeStyleSheets<any>[]
+
+    private _renderedFlags: boolean[];
+
+    private _cache: string;
 
     addStyles(styles: ThemeStyleSheets<any>){
         if(!this._sources.find($ => $ === styles)) {
             this._sources.push(styles)
+            this._renderedFlags.push(false)
             this.dispatchEvent(new StyleRenderEvent(styles))
         }
     }
 
     renderAll(){
 
-        return this._sources.map($ => renderStyleSheet($)+'\n'+renderMixins($)).join('\n')
+        this._sources.map(($, idx) => {
+            if(!this._renderedFlags[idx]) {
+                this._cache += renderStyleSheet($)+renderMixins($)
+                this._renderedFlags[idx] = true
+            }
+        })
+
+        return this._cache
 
     }
 
