@@ -1,6 +1,6 @@
 {
   "name": "stylight",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
   "main": "./dist/src/index.js",
   "scripts": {
@@ -43,9 +43,6 @@
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.3",
     "webpack-cli": "^5.0.1"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0"
   },
   "dependencies": {
     "csstype": "^3.1.1"
