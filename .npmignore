@@ -1,6 +1,6 @@
 /src
 /test
-/dist/test
+/dist/test/
 /dist/*.js
 tsconfig.json
 webpack.config.js
