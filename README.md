@@ -275,3 +275,4 @@ renderToString(appInsttance)
 - Media query processing
 - Class names transformers for `styledClass` (compression/obfuscation support)
 - Installation instructions
+- Backcompat for earlier versions of React
