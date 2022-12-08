@@ -2,13 +2,13 @@
   "name": "stylight",
   "version": "0.0.1",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
-  "main": "dist/src/index.js",
+  "main": "./dist/src/index.js",
   "scripts": {
     "build": "npx webpack --config ./webpack.config.js --mode=production && npx tsc",
     "bundle-dev": "npx webpack --config ./webpack.config.js --mode=development",
     "watch": "npx tsc --watch",
     "lint": "npx eslint --ext ts",
-    "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/unit/*.js --no-deprecation"
+    "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/**/*.js --no-deprecation"
   },
   "keywords": [
     "css-in-js",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/zelbov/stylight#readme",
   "_moduleAliases": {
-    "stylight": "dist/src/index.js"
+    "stylight": "./dist/src/"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
@@ -38,6 +38,7 @@
     "mocha": "^10.1.0",
     "module-alias": "^2.2.2",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.3",

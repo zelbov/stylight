@@ -1,4 +1,4 @@
-import { useContext, createContext, createRef, useEffect, createElement } from 'react'
+import { useContext, createContext, useEffect, createElement, useState } from 'react'
 import { styledClass, renderMixins, renderStyleSheet, ThemeStyleSheets } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
@@ -29,6 +29,12 @@ class StyleContextListener extends EventTarget {
             this._sources.push(styles)
             this.dispatchEvent(new StyleRenderEvent(styles))
         }
+    }
+
+    renderAll(){
+
+        return this._sources.map($ => renderStyleSheet($)+'\n'+renderMixins($)).join('\n')
+
     }
 
 }
@@ -70,27 +76,29 @@ export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
 
 }
 
-export const StyleRenderer = () => {
+interface StyleRendererProps {
+
+    onrender?: () => void
+
+}
+
+export const StyleRenderer = (props: StyleRendererProps) => {
 
     const ctx = useContext(StyleRenderingContext)
 
     if(!ctx) throw new Error(MISSING_RENDERING_CONTEXT_ERROR)
 
-    const ref = createRef<HTMLStyleElement>()
+    const [contents, setContents] = useState<string>(ctx.target.renderAll())
 
-    function listenStyles(style: StyleRenderEvent) {
-        if(ref.current)
-            ref.current.innerHTML += '\n'+renderStyleSheet(style.source)+'\n'+renderMixins(style.source)
+    function listenStyles() {
+        if(ctx) setContents(ctx.target.renderAll())
+        if(props.onrender) setImmediate(props.onrender)
     }
 
-    useEffect(() => {
+    ctx.target.addEventListener('style', listenStyles)
 
-        ctx.target.addEventListener('style', listenStyles)
+    useEffect(() => () => ctx.target.removeEventListener('style', listenStyles))
 
-        return () => ctx.target.removeEventListener('style', listenStyles)
-
-    })
-
-    return createElement('style', { ref })
+    return createElement('style', { dangerouslySetInnerHTML: { __html: contents } })
 
 }

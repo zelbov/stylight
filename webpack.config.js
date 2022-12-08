@@ -62,8 +62,9 @@ module.exports = function(env, args) {
             path: __dirname+'/dist'
         },
         externals: {
-            'stylight': 'stylight',
-            'react': 'React'
+            'stylight': 'Stylight',
+            'react': 'React',
+            'react-dom': 'ReactDOM'
         }
 
     }
