@@ -1,6 +1,6 @@
 {
   "name": "stylight",
-  "version": "0.0.2",
+  "version": "0.1.1",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
   "main": "./dist/src/index.js",
   "scripts": {
@@ -9,6 +9,18 @@
     "watch": "npx tsc --watch",
     "lint": "npx eslint --ext ts",
     "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/**/*.js --no-deprecation"
+  },
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./react": "./dist/src/react/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      ".": ["./dist/src/index.d.ts"],
+      "react": ["./dist/src/react/index.d.ts"],
+      "./*": []
+    }
   },
   "keywords": [
     "css-in-js",

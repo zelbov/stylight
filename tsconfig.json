@@ -6,7 +6,7 @@
         "baseUrl": ".",
         "paths": {
             "stylight": ["./src/index.ts"],
-            "stylight/react": ["src/react/index.ts"]
+            "stylight/react": ["./src/react/index.ts"]
         },
         "strict": true,
         "removeComments": false,
