@@ -1,4 +1,4 @@
-import { useContext, createContext, useEffect, createElement, useState } from 'react'
+import React, { useContext, createContext, useEffect, useState, createElement } from 'react'
 import { styledClass, renderMixins, renderStyleSheet, ThemeStyleSheets } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
@@ -96,6 +96,8 @@ export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
 interface StyleRendererProps {
 
     onrender?: () => void
+    wrapElement?: (element: React.ReactElement) => React.ReactElement
+    wrapContent?: (content: string) => React.ReactElement
 
 }
 
@@ -116,10 +118,19 @@ export const StyleRenderer = (props: StyleRendererProps) => {
 
     useEffect(() => () => ctx.target.removeEventListener('style', listenStyles))
 
-    return createElement('style', { dangerouslySetInnerHTML: { __html: contents } })
+    if(props.wrapElement) {
+
+        return props.wrapElement(createElement('style', { type: 'text/css' }, contents))
+
+    } else if (props.wrapContent) {
+
+        return props.wrapContent(contents)
+        
+    } else return createElement('style', { type: 'text/css' }, contents)
 
 }
 
+// require
 module.exports = { StyleRenderer, useStyle, StyleRenderingContext, createStyleRenderingContext }
 
 //@ts-ignore
