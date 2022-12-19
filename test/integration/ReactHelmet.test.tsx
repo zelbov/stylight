@@ -30,7 +30,7 @@ describe('ReactHelmet integration testing', () => {
                 {
                     // Option 1: Wrap CSS string into Helmet style property
                 }
-                <StyleRenderer wrapContent={ (cssText) => <Helmet style={[{ cssText }]} title={'Helmet Test'}/> }/>
+                <StyleRenderer wrapContent={ (cssText) => <Helmet style={[{ cssText }]}/> }/>
 
                 {
                     // Option 2: wrap style tag with rendered CSS as child into Helmet
