@@ -29,6 +29,8 @@ describe('React integration testing', () => {
 
         const str = renderToString(instance)
 
+        console.log(str)
+
         expect(str).contain('.obj {border:1px solid #000;}')
 
     })

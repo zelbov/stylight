@@ -1,11 +1,11 @@
-import { renderStyleSheet, renderMixins } from './common/Rendering'
+import { renderStyleSheet } from './common/Rendering'
 import { styledClass } from './common/StyledClass'
 
 export { ThemeStyleSheets, CSSProperties } from './common/ThemeTypings'
-export { renderStyleSheet, renderMixins, styledClass }
+export { renderStyleSheet, styledClass }
 
 // require
-module.exports = { renderStyleSheet, renderMixins, styledClass }
+module.exports = { renderStyleSheet, styledClass }
 
 //@ts-ignore
 global.Stylight = module.exports // UMD

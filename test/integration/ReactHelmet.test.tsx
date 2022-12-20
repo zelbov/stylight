@@ -43,6 +43,9 @@ describe('ReactHelmet integration testing', () => {
 
         const helmet = Helmet.renderStatic()
 
+        console.log(helmet.title.toString())
+        console.log(helmet.style.toString())
+
         expect(helmet.title.toString()).contain('Helmet Test').and.contain('<title')
 
         expect(helmet.style.toString()).contain('.obj {border:1px solid #000;}').and.contain('<style')

@@ -140,11 +140,17 @@ renderStyleSheet(styles)
 
 // mixins.js
 
-import { renderMixins } from 'stylight'
+import { renderStyleSheet } from 'stylight'
 
-const styles = { mixins: { body: { margin: 'none' } } }
+const styles = {
+    foo: {
+        mixins: {
+            body: { margin: 'none' }
+        }
+    }
+}
 
-renderMixins(styles)
+renderStyleSheet(styles)
 
 /*
 
@@ -320,6 +326,7 @@ renderToString(<App/>)
 ```
 
 ***
+</br>
 
 ## Also
 
@@ -337,6 +344,7 @@ renderToString(<App/>)
 </br>
 
 ## Installation
+
 </br>
 
 ### npm
@@ -352,15 +360,16 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.min.js">
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.react.min.js">
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
 ```
+
 </br>
 
 ### Requirements
@@ -372,5 +381,10 @@ There are two conditional requirements for this package to use.
 
 ## TODO (planned for future releases)
 
-- Media query processing
-- Class names transformers for `styledClass` (compression/obfuscation support)
+- Media queries (DOC)
+- At-rules (others aside of media queries)
+- Class names transformers for `styledClass` (compression/obfuscation for rendered class names)
+
+## Known bugs / issues
+
+- Mixins are sometimes rendered outside their initial media query scope

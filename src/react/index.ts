@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState, createElement } from 'react'
-import { styledClass, renderMixins, renderStyleSheet, ThemeStyleSheets } from 'stylight';
+import { styledClass, renderStyleSheet, ThemeStyleSheets } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
 
@@ -45,7 +45,7 @@ class StyleContextListener extends EventTarget {
 
         this._sources.map(($, idx) => {
             if(!this._renderedFlags[idx]) {
-                this._cache += renderStyleSheet($)+renderMixins($)
+                this._cache += renderStyleSheet($)
                 this._renderedFlags[idx] = true
             }
         })
