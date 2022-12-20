@@ -63,8 +63,7 @@ module.exports = function(env, args) {
         },
         externals: {
             'stylight': 'Stylight',
-            'react': 'React',
-            'react-dom': 'ReactDOM'
+            'react': 'React'
         }
 
     }

@@ -111,20 +111,22 @@ export const StyleRenderer = (props: StyleRendererProps) => {
 
     function listenStyles() {
         if(ctx) setContents(ctx.target.renderAll())
-        if(props.onrender) setImmediate(props.onrender)
+        if(props.onrender) props.onrender()
     }
 
     ctx.target.addEventListener('style', listenStyles)
 
     useEffect(() => () => ctx.target.removeEventListener('style', listenStyles))
 
-    if(props.wrapElement) {
+    const { wrapElement, wrapContent } = props;
 
-        return props.wrapElement(createElement('style', { type: 'text/css' }, contents))
+    if(wrapElement) {
 
-    } else if (props.wrapContent) {
+        return wrapElement(createElement('style', { type: 'text/css' }, contents))
 
-        return props.wrapContent(contents)
+    } else if (wrapContent) {
+
+        return wrapContent(contents)
         
     } else return createElement('style', { type: 'text/css' }, contents)
 
