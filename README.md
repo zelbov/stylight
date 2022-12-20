@@ -140,11 +140,17 @@ renderStyleSheet(styles)
 
 // mixins.js
 
-import { renderMixins } from 'stylight'
+import { renderStyleSheet } from 'stylight'
 
-const styles = { mixins: { body: { margin: 'none' } } }
+const styles = {
+    foo: {
+        mixins: {
+            body: { margin: 'none' }
+        }
+    }
+}
 
-renderMixins(styles)
+renderStyleSheet(styles)
 
 /*
 
@@ -239,10 +245,7 @@ const App = () =>
 
 </StyleRenderingContext.Provider>
 
-
-const appInsttance = <App/>
-
-renderToString(appInsttance)
+renderToString(<App/>)
 
 /*
 
@@ -261,6 +264,7 @@ renderToString(appInsttance)
 ```
 
 ***
+</br>
 
 ## Also
 
@@ -278,6 +282,7 @@ renderToString(appInsttance)
 </br>
 
 ## Installation
+
 </br>
 
 ### npm
@@ -302,6 +307,7 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 
 
 ```
+
 </br>
 
 ### Requirements
@@ -313,5 +319,10 @@ There are two conditional requirements for this package to use.
 
 ## TODO (planned for future releases)
 
-- Media query processing
-- Class names transformers for `styledClass` (compression/obfuscation support)
+- Media queries (DOC)
+- At-rules (others aside of media queries)
+- Class names transformers for `styledClass` (compression/obfuscation for rendered class names)
+
+## Known bugs / issues
+
+- Mixins are sometimes rendered outside their initial media query scope

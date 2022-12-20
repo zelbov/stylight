@@ -15,6 +15,8 @@ describe('StyledClass unit testing', () => {
             null
         )
 
+        console.log(className)
+
         expect(className).eq('menu')
 
     })

@@ -1,12 +1,15 @@
 import 'mocha'
 import { expect } from 'chai'
-import { renderMixins, renderStyleSheet } from 'stylight'
+import { renderStyleSheet } from 'stylight'
 
 describe('Style rendering unit testing', () => {
 
     it('Render simple styling object: should succeed & return valid string', () => {
 
         const rendered = renderStyleSheet({ menu: { border: '1px solid #000' } })
+        
+        console.log(rendered)
+
         expect(rendered.trim()).eq('.menu {border:1px solid #000;}')
 
     })
@@ -19,6 +22,8 @@ describe('Style rendering unit testing', () => {
                 '& div': { backgroundColor: 'red' }
             }
         })
+
+        console.log(rendered)
         
         expect(rendered).contain('.menu {border:1px solid #000;}')
         expect(rendered).contain('.menu div {background-color:red;}')
@@ -66,6 +71,8 @@ describe('Style rendering unit testing', () => {
 
         const rendered = renderStyleSheet(styles)
 
+        console.log(rendered)
+
         expect(rendered).contain('filter:progid:DXImageTransform')
         expect(rendered).contain('background:rgb(35,85,63)')
         expect(rendered).contain('background:-moz-linear-gradient')
@@ -76,9 +83,17 @@ describe('Style rendering unit testing', () => {
 
     it('Render mixins from style objects: should contain references to global descriptors', () => {
 
-        const styles = { mixins: { body: { margin: 'none' } } }
+        const styles = {
+            foo: {
+                mixins: {
+                    body: { margin: 'none' }
+                }
+            }
+        }
 
-        const rendered = renderMixins(styles)
+        const rendered = renderStyleSheet(styles)
+
+        console.log(rendered)
 
         expect(rendered).contain('body {margin:none;}')
         expect(rendered).not.contain('.body')

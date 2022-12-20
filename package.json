@@ -1,6 +1,6 @@
 {
   "name": "stylight",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
   "main": "./dist/src/index.js",
   "scripts": {
@@ -39,9 +39,6 @@
     "url": "https://github.com/zelbov/stylight/issues"
   },
   "homepage": "https://github.com/zelbov/stylight#readme",
-  "_moduleAliases": {
-    "stylight": "./dist/src/"
-  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.1",
