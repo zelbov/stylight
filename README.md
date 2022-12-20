@@ -1,14 +1,13 @@
 # Stylight: simple & reliable CSS-in-JS
 
-## Disclaimer
+A feature-rich CSS-in-JS module for web UI development, with minimal overhead, designed for better developer experience, granularity and simplicity.
 
-*As a "little full-stack developer of myself", I am tired of "complete" solutions for web UI development in the wild. If you'll ever need to ask me why I made THIS - you already know the answer.*
-
-## Features & examples
+## Features and examples
 
 ***
+</br>
 
-### - Renders css-in-js into an actual CSS stylesheet contents, using `'csstype'` compliant css-in-js definitions (`camelCased` style properties e.g. React's CSSProperties)
+- Renders css-in-js into an actual CSS stylesheet contents, using `'csstype'` compliant css-in-js definitions (`camelCased` style properties, e.g. React's `CSSProperties`)
 
 ```JS
 
@@ -28,8 +27,9 @@ renderStyleSheet(styles)
 ```
 
 ***
+</br>
 
-### - Implements nested style properties definition straight in JS style objects hierarchy, applying styles to children by using `'& <child_id>'` (see examples above)
+- Nested style properties definition straight in JS style objects hierarchy, applying styles to children by using `'& <child_id>'` (see examples above)
 
 ```JS
 
@@ -60,8 +60,9 @@ renderStyleSheet(styles)
 ```
 
 ***
+</br>
 
-### - Implements property overrides for same CSS property for different target renderer platforms
+- Property overrides for same CSS property for different target renderer platforms
 
 ```JS
 
@@ -131,8 +132,9 @@ renderStyleSheet(styles)
 ```
 
 ***
+</br>
 
-### - Mixins: applying styles to global object descriptors
+- Mixins: applying styles to global object descriptors
 
 ```JS
 
@@ -154,8 +156,9 @@ renderMixins(styles)
 ```
 
 ***
+</br>
 
-### - Not only rendering: styled class picker from provided styling object
+- Not only rendering: styled class picker from provided styling object
 
 ```TS
 
@@ -181,8 +184,9 @@ styledClass<typeof styles>(
 ```
 
 ***
+</br>
 
-### - Integration plugin: React
+- Integration plugin: React
 
 ```JSX
 
@@ -260,19 +264,54 @@ renderToString(appInsttance)
 
 ## Also
 
-- Made with Typescript, type completion friendly af. You'll like the way it works for you when you define objects, their styles, their children and their styles, and so on, and so on, when you use Typescript type completions.
+- Made with Typescript, type completion friendly. You'll like the way it works for you when you define objects, their styles, their children and their styles, and so on, and so on.
 
-- *Almost* zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle size at all.
+- *Almost* zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
 
-- Lightweight - minified bundle size is only around 2KB, React integration plugin is less than 1KB of total size.
+- Lightweight - minified bundle size is only around 2KB, React integration plugin is also about 2KB of total size.
 
-- Great performance. No more IDE lags during typechecks of simple stylings applied. You know what i mean if you know what i mean.
+- Great performance. No more IDE lags during typechecks of simple stylings applied. You know what I mean if you know what I mean.
 
 - Integration plugins out of the box: currently only for React
 
-## TODO
+***
+</br>
+
+## Installation
+</br>
+
+### npm
+
+`npm i -S stylight`
+
+This will provide `stylight` core package with plugins included, e.g. `stylight/react`
+
+</br>
+
+### Browser (UMD)
+
+```HTML
+
+<!-- core package -->
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.min.js">
+<!-- will provide Stylight UMD global -->
+
+<!-- React plugin -->
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.react.min.js">
+<!-- will provide StylightReact UMD global -->
+
+
+```
+</br>
+
+### Requirements
+
+There are two conditional requirements for this package to use.
+
+- `Typescript` >= `4.1` must be used as default TS server in case of using type completions, and installed as a [dev]dependency for Typescript projects aswell. A package uses [Template Literal Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html#template-literal-types) feature introduced in this version, so earlier versions of Typescript used will most likely cause problems. However, for Javascript projects without type completions both in a project and IDE, no Typescript version requirements are applied.
+- In case of using `React`, versions `16` and higher are considered supported since no tests for lower versions are done. A package relies on React as an optional dependency only, in case React is actually used in a host project
+
+## TODO (planned for future releases)
 
 - Media query processing
 - Class names transformers for `styledClass` (compression/obfuscation support)
-- Installation instructions
-- Backcompat for earlier versions of React
