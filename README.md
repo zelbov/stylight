@@ -206,7 +206,10 @@ import {
     Styled,
 
     // Renderer component for all received style objects during render of previous components that used `useStyle` hook
-    StyleRenderer
+    StyleRenderer,
+
+    // An actual hook that pushes defined styling objects into top-level context provider
+    useStyle
 
 } from 'stylight/react'
 
