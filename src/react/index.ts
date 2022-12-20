@@ -132,8 +132,14 @@ export const StyleRenderer = (props: StyleRendererProps) => {
 
 }
 
+export const Styled = (props: { children?: React.ReactNode[] }) => {
+
+    return createElement(StyleRenderingContext.Provider, { value: createStyleRenderingContext() }, ...(props.children || []))
+
+}
+
 // require
-module.exports = { StyleRenderer, useStyle, StyleRenderingContext, createStyleRenderingContext }
+module.exports = { StyleRenderer, useStyle, StyleRenderingContext, createStyleRenderingContext, Styled }
 
 //@ts-ignore
 global.StylightReact = module.exports // UMD

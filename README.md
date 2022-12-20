@@ -188,6 +188,68 @@ styledClass<typeof styles>(
 
 - Integration plugin: React
 
+Basic usage (shorthand)
+
+```JSX
+
+import { renderToString } from 'react-dom/server'
+
+import {
+
+    // A shorthand to provide top-level style rendering context wrap
+    Styled,
+
+    // Renderer component for all received style objects during render of previous components that used `useStyle` hook
+    StyleRenderer
+
+} from 'stylight/react'
+
+// A React component that uses styling hook
+const Component = () => {
+
+    // pass individual component's styling into top-level theme provider
+    const styled = useStyle({
+        obj: { border: '1px solid #000' }
+    })
+
+
+    // supports class names type autocompletion on-the-fly in case of using a hook
+    return <div className={
+        styled('obj')
+    }></div>
+
+}
+
+// Host application that uses style rendering context
+const App = () => <Styled>
+
+    {/* Render component that uses styling hook*/}
+    <Component/>
+
+    {/* Use the actual renderer on the end of node tree in case we need to synchronously render styles without waiting for next state update & re-render */}
+    <StyleRenderer/>
+
+</Styled>
+
+renderToString(<App/>)
+
+/*
+
+(pretty)
+
+"
+<div class="obj"></div>
+<style>
+    .obj {border:1px solid #000;}
+</style>
+"
+
+*/
+
+```
+
+Extended usage (exposed context):
+
 ```JSX
 
 // react_sample.jsx
@@ -239,10 +301,7 @@ const App = () =>
 
 </StyleRenderingContext.Provider>
 
-
-const appInsttance = <App/>
-
-renderToString(appInsttance)
+renderToString(<App/>)
 
 /*
 
