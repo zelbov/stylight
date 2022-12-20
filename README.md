@@ -293,11 +293,11 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.min.js">
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.react.min.js">
+<script type="text/javascript" src="https://unpkg.com/stylight/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
