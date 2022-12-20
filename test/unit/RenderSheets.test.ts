@@ -1,5 +1,6 @@
 import 'mocha'
 import { expect } from 'chai'
+import { format as pretty } from 'prettier'
 import { renderStyleSheet } from 'stylight'
 
 describe('Style rendering unit testing', () => {
@@ -8,7 +9,7 @@ describe('Style rendering unit testing', () => {
 
         const rendered = renderStyleSheet({ menu: { border: '1px solid #000' } })
         
-        console.log(rendered)
+        console.log(pretty(rendered, { parser: 'css' }))
 
         expect(rendered.trim()).eq('.menu {border:1px solid #000;}')
 
@@ -23,7 +24,7 @@ describe('Style rendering unit testing', () => {
             }
         })
 
-        console.log(rendered)
+        console.log(pretty(rendered, { parser: 'css' }))
         
         expect(rendered).contain('.menu {border:1px solid #000;}')
         expect(rendered).contain('.menu div {background-color:red;}')
@@ -71,7 +72,7 @@ describe('Style rendering unit testing', () => {
 
         const rendered = renderStyleSheet(styles)
 
-        console.log(rendered)
+        console.log(pretty(rendered, { parser: 'css' }))
 
         expect(rendered).contain('filter:progid:DXImageTransform')
         expect(rendered).contain('background:rgb(35,85,63)')
@@ -93,7 +94,7 @@ describe('Style rendering unit testing', () => {
 
         const rendered = renderStyleSheet(styles)
 
-        console.log(rendered)
+        console.log(pretty(rendered, { parser: 'css' }))
 
         expect(rendered).contain('body {margin:none;}')
         expect(rendered).not.contain('.body')

@@ -3,6 +3,7 @@ import 'mocha'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { createStyleRenderingContext, Styled, StyleRenderer, StyleRenderingContext, useStyle } from 'stylight/react'
+import { format as pretty } from 'prettier'
 
 describe('React integration testing', () => {
 
@@ -29,7 +30,7 @@ describe('React integration testing', () => {
 
         const str = renderToString(instance)
 
-        console.log(str)
+        console.log(pretty(str, { parser: 'html' }))
 
         expect(str).contain('.obj {border:1px solid #000;}')
 
@@ -43,7 +44,7 @@ describe('React integration testing', () => {
                 </Styled>,
             rendered = renderToString(<App/>)
 
-        console.log(rendered)
+        console.log(pretty(rendered, { parser: 'html' }))
         expect(rendered).contain('.obj {border:1px solid #000;}')
 
     })

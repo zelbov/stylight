@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
+import { format as pretty } from 'prettier'
 import { createTheme } from 'stylight'
 
 describe('Theme unit testing', () => {
@@ -12,7 +13,7 @@ describe('Theme unit testing', () => {
             }),
             css = render()
 
-        console.log(css)
+        console.log(pretty(css, { parser: 'css' }))
         console.log(styledClass('obj'))
 
         expect(styledClass('obj')).eq('obj')
@@ -40,7 +41,7 @@ describe('Theme unit testing', () => {
 
         const css = render()
 
-        console.log(css)
+        console.log(pretty(css, { parser: 'css' }))
 
         expect(styledClass('obj2')).eq('obj2')
         expect(styledClass('obj3')).eq('obj3')

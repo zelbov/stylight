@@ -1,5 +1,6 @@
 import 'mocha'
 import React from 'react'
+import { format as pretty } from 'prettier'
 import { createStyleRenderingContext, Styled, StyleRenderer, StyleRenderingContext, useStyle } from 'stylight/react'
 import { Helmet } from 'react-helmet'
 import { renderToString } from 'react-dom/server'
@@ -43,8 +44,8 @@ describe('ReactHelmet integration testing', () => {
 
         const helmet = Helmet.renderStatic()
 
-        console.log(helmet.title.toString())
-        console.log(helmet.style.toString())
+        console.log(pretty(helmet.title.toString(), { parser: 'html' }))
+        console.log(pretty(helmet.style.toString(), { parser: 'html' }))
 
         expect(helmet.title.toString()).contain('Helmet Test').and.contain('<title')
 
@@ -68,8 +69,8 @@ describe('ReactHelmet integration testing', () => {
 
         const helmet = Helmet.renderStatic()
 
-        console.log(helmet.title.toString())
-        console.log(helmet.style.toString())
+        console.log(pretty(helmet.title.toString(), { parser: 'html' }))
+        console.log(pretty(helmet.style.toString(), { parser: 'html' }))
 
         expect(helmet.title.toString()).contain('Helmet Test #2').and.contain('<title')
 

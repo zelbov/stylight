@@ -1,4 +1,5 @@
 import 'mocha'
+import { format as pretty } from 'prettier'
 import { expect } from 'chai'
 import { renderStyleSheet } from 'stylight'
 
@@ -54,7 +55,7 @@ describe('MediaQueries unit testing', () => {
 
         })
 
-        console.log(css)
+        console.log(pretty(css, { parser: 'css' }))
 
         //TODO: regex match based test for whole stylesheet consistency check
         expect(css).contain('.foo {position:inherit;}')
