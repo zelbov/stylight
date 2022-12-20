@@ -169,7 +169,8 @@ export const renderStyleSheet = <T extends Object>(theme: ThemeStyleSheets<T>) =
         .map(
             key => theme[key as keyof typeof theme] 
                 ? renderStyles(theme[key as keyof T]!, key, '\n.'+key, context)
-                : '')
+                : ''
+        ).join('')
         +`${
             context.nestedTargets.length ? context.nestedTargets.map(t => t.css).join('') : ''
         }${
