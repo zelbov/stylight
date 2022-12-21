@@ -38,4 +38,6 @@ type ThemeContainedSheet <T> = {
 }
 
 export type ThemeStyleSheets<T> = 
-& ThemeContainedSheet<T>
+& ThemeContainedSheet<T> & {
+    mixins?: ContainedMixins
+}
