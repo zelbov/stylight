@@ -337,7 +337,7 @@ renderToString(<App/>)
 
 - *Almost* zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
 
-- Lightweight - minified bundle size is only around 2KB, React integration plugin is also about 2KB of total size.
+- Lightweight - minified bundle size is only around 4KB, React integration plugin is about 2KB of total size.
 
 - Great performance. No more IDE lags during typechecks of simple stylings applied. You know what I mean if you know what I mean.
 
