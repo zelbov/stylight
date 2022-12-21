@@ -19,7 +19,7 @@
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "sourceMap": true,
+        "inlineSourceMap": true,
         "declaration": true,
         "resolveJsonModule": true,
         "allowJs": true,

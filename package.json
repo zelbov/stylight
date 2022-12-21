@@ -9,7 +9,7 @@
     "watch": "npx tsc --watch",
     "lint": "npx eslint --ext ts",
     "clean": "rm -rf ./dist && rm -rf ./umd",
-    "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/**/*.js --no-deprecation"
+    "test": "npx mocha -r source-map-support/register -r module-alias/register ./dist/test/**/*.js --no-deprecation"
   },
   "types": "./dist/src/index.d.ts",
   "exports": {
