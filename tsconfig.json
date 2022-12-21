@@ -26,5 +26,5 @@
         "jsx": "react"
     },
     "include": ["./src", "./test"],
-    "exclude": ["dist", "node_modules", ".trash"]
+    "exclude": ["dist", "node_modules", ".trash", "./src/umd.ts", "./src/react/umd.ts"]
 }
