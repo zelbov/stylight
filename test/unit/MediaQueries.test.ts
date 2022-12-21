@@ -60,7 +60,7 @@ describe('MediaQueries unit testing', () => {
         //TODO: regex match based test for whole stylesheet consistency check
         expect(css).contain('.foo {position:inherit;}')
         expect(css).contain('.bar {position:inherit;}')
-        expect(css).contain('@media (all) and (max-width: 1280px) and (min-width: 600px)')
+        expect(css).contain('@media (all) and (max-width:1280px) and (min-width:600px)')
         expect(css).contain('.foo {position:relative;}')
 
     })

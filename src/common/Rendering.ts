@@ -1,182 +1,271 @@
 import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, ThemeStyleSheets } from "./ThemeTypings";
 
-type RenderContext = {
+const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
+const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
 
-    nt: { target: string, css: string }[],
-    mdt: { target: string, css: string }[],
-    mxt: { target: string, css: string }[]
+const nestedCheckExpr = /^\&(?<target>(.|\s)+)/
+const cssKeyExpr = new RegExp(/[A-Z]/g)
 
-}
+type RenderScopeType = 'element' | 'nested' | 'media' | 'mixins' | 'global'
 
-const prepareContext = () : RenderContext => {
+type ScopedRenderContext = {
 
-    const nt : { target: string, css: string }[] = [];
-    const mdt: { target: string, css: string }[] = [];
-    const mxt: { target: string, css: string }[] = []
-
-    return { nt, mdt, mxt }
-
-}
-
-const cssKeyExpr = new RegExp(/[A-Z]/g);
-
-const renderOverrides = (props: ContainedCSSProperties, accumulator: string, context: RenderContext) => {
-
-    const renderedOverrides = ((props as { overrides: CSSProperties[] }).overrides as CSSProperties[])
-        .map($ =>
-            renderStyles($, '', '', context)
-                .replace(/(^\s*?\{)|(\}\s*$)/g, '')
-            )
-        .join('')
-
-    return `${accumulator}${renderedOverrides}`
+    // current scope
+    cs: string
+    br: ScopedRenderContext | null
+    type: RenderScopeType
+    // target scopes & their nested rules or inner scopes
+    tgs: { [key: string]: ScopedRenderContext }
+    css?: string[]
+    //TODO: strinfigy method
 
 }
 
-const prepareMediaQueries = (media: MediaQuery[], targetKey: string, context: RenderContext) => {
+const prepareScopedRenderContext : (target: string, type: RenderScopeType, backref?: ScopedRenderContext) => ScopedRenderContext
+= (target, type, backref) => {
 
-    return media.map(query => {
+    return {
+        cs: target, br: backref || null, tgs: {}, css: [], type
+    };
 
-        const targets = Object.keys(query)
+}
+
+const renderScope = (scopeDescriptor: string, scopeCSS: string[]) : string =>
+    scopeCSS.length == 0 ? '' :
+    scopeDescriptor != ''
+        ? `${scopeDescriptor} {${
+            scopeCSS.map(css => css+';').join('')
+        }}`
+        : scopeCSS.map(css => css+';').join('')
+
+const renderScopeRecursive = (ctx: ScopedRenderContext, prefix: string = '') : string => {
+
+    let accumulator = ''
+    prefix = prefix + ctx.cs
+
+    if(ctx.css as string[]) accumulator += renderScope(
+        prefix, (ctx as ScopedRenderContext).css as string[]
+    )
+
+    let inner = ctx.type != 'media'
+        ? Object.keys(ctx.tgs).map($ => renderScopeRecursive(ctx.tgs[$], prefix)).join('')
+        : ctx.cs+`{${Object.keys(ctx.tgs).map($ => renderScopeRecursive(ctx.tgs[$], '')).join('')}}`
+    
+    return accumulator + inner
+
+
+}
+
+const traverseBackrefs = (scope: ScopedRenderContext) => {
+
+    if(scope.type == 'global') return scope;
+
+    let parent = scope.br
+
+    if(!parent) throw new Error(BACKREF_UNAVAILABLE(scope.cs))
+
+    while(parent.br && parent.type != 'media') parent = parent!.br
+
+    return parent
+
+}
+
+const describeMediaQueryTarget = (query: MediaQuery) => {
+
+    const targets = Object.keys(query)
             .filter($ => $ != 'css')
             .sort()
             .map($ => {
                 const value = query[$ as keyof MediaQuery] as string,
                     key = $.replace(cssKeyExpr, v => `-${v.toLowerCase()}`)
-                return `(${key}${value.length ? `: ${value}` : ''})`
+                return `(${key}${value.length ? `:${value}` : ''})`
             })
             .join(' and '),
-        mediaTarget = `@media ${targets}`,
-        css = renderStyles(query.css, '', '\n.'+targetKey, context),
-        obj = { target: mediaTarget, css }
+        mediaTarget = `@media ${targets}`
 
-        return obj
-
-    })
+    return mediaTarget
 
 }
 
-const groupMediaQueries = (queries: { target: string, css: string }[]) => {
+const renderCSS = (props: CSSProperties) => {
 
-    const accumulators : {[query: string]: string} = {}
-
-    queries.map(query => accumulators[query.target] = (accumulators[query.target] || '')+query.css)
-    
-    return Object.keys(accumulators).map($ => $+' {'+accumulators[$]+'}')
-
-}
-
-const prepareMixins = (props: { mixins: ContainedMixins }, context: RenderContext) => {
-
-    const mixins = Object.keys(props.mixins).map(target => {
-
-        const obj = {
-            target, css: renderStyles(props.mixins[target], '\n', '', context)
-        }
-
-        return obj
-
-    })
-
-    return mixins
-
-}
-
-const groupMixins = (mixins: { target: string, css: string }[]) => {
-
-    const accumulators : {[mixin: string]: string} = {}
-
-    mixins.map(mixin => accumulators[mixin.target] = (accumulators[mixin.target] || '')+mixin.css)
-
-    return Object.keys(accumulators).map($ => $+accumulators[$])
-
-}
-
-const nestedCheckExpr = /^\&(?<target>(.|\s)+)/
-
-const prepareNestedTarget = (props: ContainedCSSProperties, target: string, key: string, match: RegExpMatchArray, context: RenderContext) => {
-
-    const nestedTarget = target + match.groups!.target,
-        obj = {
-            target: nestedTarget,
-            css: renderStyles(props[key as keyof ContainedCSSProperties] as ContainedCSSProperties, '\n'+key, nestedTarget, context)
-        };
-
-    return obj
-
-}
-
-const renderStyles = (
-    props: ContainedCSSProperties | CSSProperties,
-    targetKey: string,
-    target: string,
-    context: RenderContext
-) : string => {
-
-    const { nt, mdt, mxt } = context
-
-    const result = Object.keys(props as CSSProperties).reduce((accumulator, key) => {
-
-        if(key == 'mixins') {
-
-            const mixins = prepareMixins(props as { mixins: ContainedMixins }, context)
-
-            mxt.push(...mixins)
-
-            return accumulator
-
-        } 
-
-        if(key == 'media') {
-
-            const queries = prepareMediaQueries((props as ContainedCSSProperties).media as MediaQuery[], targetKey, context)
-
-            mdt.push(...queries)
-
-            return accumulator;
-
-        }
-
-        if(key == 'overrides') return renderOverrides(props as ContainedCSSProperties, accumulator, context)
-
-        let nestedMatch = key.match(nestedCheckExpr);
-
-        if(nestedMatch) {
-
-            nt.push(prepareNestedTarget(props as ContainedCSSProperties, target, key, nestedMatch, context));
-
-            return accumulator;
-
-        }
+    return Object.keys(props).map(key => {
 
         const cssKey = ((str) => str.replace(cssKeyExpr, v => `-${v.toLowerCase()}`))(key)
-        const cssValue = (props as ContainedCSSProperties)[key as keyof ContainedCSSProperties]
+        const cssValue = (props as CSSProperties)[key as keyof CSSProperties]
 
-        return `${accumulator}${cssKey}:${cssValue};`
+        return `${cssKey}:${cssValue}`
 
-
-    }, '');
-
-    return `${ result.length ? `${target} {${result}}` : ''}`
+    }).join('')
 
 }
 
-export const renderStyleSheet = <T extends Object>(theme: ThemeStyleSheets<T>) => {
+const traverseToMediaHostDescriptor = (ctx: ScopedRenderContext) : string => {
 
-    const context = prepareContext()
+    let scope = ctx,
+        descriptor = ctx.cs
 
-    return Object.keys(theme)
-        .map(
-            key => theme[key as keyof typeof theme] 
-                ? renderStyles(theme[key as keyof T]!, key, '\n.'+key, context)
-                : ''
-        ).join('')
-        +`${
-            context.nt.length ? context.nt.map(t => t.css).join('') : ''
-        }${
-            context.mdt.length ? groupMediaQueries(context.mdt) : ''
-        }${
-            context.mxt.length ? groupMixins(context.mxt) : ''
-        }`
+    switch(scope.type) {
+
+        case 'nested':
+
+            while(scope.type == 'nested') {
+                const parent = scope.br
+                if(!parent) throw new Error(BACKREF_UNAVAILABLE(scope.cs))
+                scope = parent
+                descriptor = parent.cs + descriptor
+            }
+            break;
+
+        //TODO: case 'mixins'
+
+    }
+
+    return descriptor
+
+}
+
+const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | ContainedCSSProperties, ctx: ScopedRenderContext) => {
+
+    if(!ctx) ctx = prepareScopedRenderContext('', 'global');
+
+    (Object.keys(sheet)).map(key => {
+
+        const contents = sheet[key as keyof(ThemeStyleSheets<T> | ContainedCSSProperties)]
+
+        // refuse to process undefined values e.g. forbidden "media" keyword inside "mixins" or global scope
+        if(!contents) return;
+
+        switch(true) {
+
+            case key == 'atRules': 
+
+                const atScope = ctx.type == 'global' ? ctx : traverseBackrefs(ctx!)
+
+                if(!atScope.css) atScope.css = []
+
+                atScope.css.push(...contents as string[])
+
+                break;
+
+            case key == 'mixins':
+
+                const mxScope = ctx.type == 'global' || ctx.type == 'mixins' ? ctx : traverseBackrefs(ctx!);
+
+                (Object.keys(contents as ContainedMixins)).map(key => {
+
+                    const target = key,
+                        scopeCtx = (mxScope.tgs as {[key: string]: ScopedRenderContext })[target] =
+                            prepareScopedRenderContext(target, 'mixins', mxScope)
+
+                    prepareScopedRenderPlan((contents as ContainedMixins)[key], scopeCtx)
+
+                })
+
+                break;
+
+            case key == 'media':
+                
+                let globalScope = traverseBackrefs(ctx!),
+                    currentScopeDescriptor = traverseToMediaHostDescriptor(ctx);
+
+                (contents as MediaQuery[]).map(query => {
+
+                    const mediaTarget = describeMediaQueryTarget(query);
+
+                    let mediaScope = (globalScope.tgs as {[key: string]: ScopedRenderContext })[mediaTarget]
+
+                    if(!mediaScope)
+                        mediaScope = (globalScope.tgs as {[key: string]: ScopedRenderContext })[mediaTarget] =
+                            prepareScopedRenderContext(mediaTarget, 'media', globalScope)
+
+                    mediaScope.tgs[currentScopeDescriptor] = prepareScopedRenderContext(currentScopeDescriptor, 'element', mediaScope)
+
+                    prepareScopedRenderPlan(query.css as ContainedCSSProperties, mediaScope.tgs[currentScopeDescriptor])
+
+                })
+
+                break;
+
+            case key == 'overrides':
+
+                if(!ctx!.css) ctx!.css = [] as string[];
+
+                (contents as CSSProperties[]).map(styles => {
+
+                    ctx.css!.push(renderCSS(styles))
+
+                })
+
+                break;
+
+            case typeof(key) == 'string' && key[0] == '&':
+
+                const match = key.match(nestedCheckExpr);
+
+                if(match) {
+
+                    const nestedTarget = match.groups!.target;
+                    
+                    const nestedCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })
+                        [nestedTarget] = prepareScopedRenderContext(nestedTarget, 'nested', ctx)
+                    
+                    prepareScopedRenderPlan(contents as ContainedCSSProperties, nestedCtx)
+
+                    break;
+
+                } else throw new Error(NESTED_DESCRIPTOR_INVALID(key))
+
+            case ctx.type == 'global':
+
+                const target = '.'+key,
+                    scopeCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })[target] = prepareScopedRenderContext(target, 'element', ctx)
+
+                prepareScopedRenderPlan(contents as ContainedCSSProperties, scopeCtx)
+
+                break;
+
+            default: 
+
+                if(!ctx!.css) ctx!.css = [] as string[];
+
+                (ctx!.css as string[]).push(renderCSS({[key]: contents }))
+
+                break;
+
+        }
+
+    })
+
+    return ctx;
+
+}
+
+export const renderStyleSheet = <T extends Object>(sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>) => {
+
+    const ctx = prepareScopedRenderContext('', 'global'),
+        plan = prepareScopedRenderPlan(sheet, ctx),
+        result = renderExplained(plan)
+
+    // cleanup (GC)
+    ctx.tgs = {}
+
+    return result;
+
+}
+
+export const explainStyleSheet = <T extends Object>(sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>) => 
+    prepareScopedRenderPlan(sheet, prepareScopedRenderContext('', 'global'))
+
+export const renderExplained = (ctx: ScopedRenderContext) => {
+
+    return renderScope('', ctx.css || [])+Object.keys(ctx.tgs).map(key => {
+
+        const target = (ctx!.tgs as {[key: string] : ScopedRenderContext})[key]
+        const result = renderScopeRecursive(target)
+
+        return result
+
+    }).join('')
 
 }

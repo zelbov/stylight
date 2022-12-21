@@ -3,35 +3,39 @@ import { Properties } from 'csstype'
 // React-compatible
 export type CSSProperties = Properties<string | number>
 
-type MediaFeatures = {
+interface AllowedUntypedProperties {
 
-    //TODO: add type definitions for all media types and features
-    //e.g. orientation, any-hover, hover, etc
-
-} & {
-    
-    // allows custom media features without typechecking support
     [key: string]: unknown
 
 }
 
 type ResolutionMediaFeatures = { [key in `${'min' | 'max'}-${'width' | 'height'}`]?: string }
 
-export type MediaQuery =
-MediaFeatures &
-ResolutionMediaFeatures &
-{ css: Omit<ContainedCSSProperties, 'media'> }
+interface MediaFeatures extends AllowedUntypedProperties, ResolutionMediaFeatures {
 
-export type ContainedCSSProperties =
-CSSProperties &
+    //TODO: add type definitions for all media types and features
+    //e.g. orientation, any-hover, hover, etc
+
+}
+
+export interface MediaQuery
+extends MediaFeatures, ResolutionMediaFeatures
 {
+    css: Omit<ContainedCSSProperties, 'media'>
+}
+
+export interface ContainedCSSProperties extends CSSProperties {
+
     [key: `&${string}`]: ContainedCSSProperties,
     overrides?: CSSProperties[]
+    atRules?: string[],
     media?: MediaQuery[],
     mixins?: ContainedMixins
 }
 
-export type ContainedMixins = { [key: string]: ContainedCSSProperties }
+export type ContainedMixins = {
+    [key: string]: ContainedCSSProperties & { mixins?: never }
+} & { mixins?: never, media?: never}
 
 type ThemeContainedSheet <T> = {
     [P in keyof T]?: ContainedCSSProperties;
