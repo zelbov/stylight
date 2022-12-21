@@ -8,6 +8,7 @@
     "bundle-dev": "npx webpack --config ./webpack.config.js --mode=development",
     "watch": "npx tsc --watch",
     "lint": "npx eslint --ext ts",
+    "clean": "rm -rf ./dist && rm -rf ./umd",
     "test": "npx mocha -r source-map-support -r module-alias/register ./dist/test/**/*.js --no-deprecation"
   },
   "types": "./dist/src/index.d.ts",

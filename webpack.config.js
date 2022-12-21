@@ -38,7 +38,7 @@ module.exports = function(env, args) {
 
         ...commonConfigs,
 
-        entry: './src/index.ts',
+        entry: './src/umd.ts',
         optimization: {
             minimize: args.mode == 'production'
         },
@@ -53,7 +53,7 @@ module.exports = function(env, args) {
 
         ...commonConfigs,
 
-        entry: './src/react/index.ts',
+        entry: './src/react/umd.ts',
         optimization: {
             minimize: args.mode == 'production'
         },
