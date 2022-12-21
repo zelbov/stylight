@@ -322,6 +322,71 @@ describe('Explainer unit tests', () => {
 
         })
 
+        const explainMultiple = explainStyleSheet({
+
+            obj1: {
+
+                media: [
+                    {
+
+                        "min-width": '640px',
+                        css: { position: 'relative' }
+
+                    },
+                    {
+                        "min-width": '600px',
+                        css: { margin: 0 }
+                    }
+                ]
+
+            },
+
+            obj2: {
+
+                media: [
+                    {
+
+                        "min-width": '600px',
+                        css: { position: 'relative' }
+
+                    },
+                    {
+                        "min-width": '640px',
+                        css: { margin: '0' }
+                    }
+                ]
+
+            }
+
+        })
+
+        it('Explain styles containing multiple media query parameter sets: should contain contexts for both queries', () => {
+
+            const media600 = explainMultiple.tgs['@media (min-width:640px)'],
+                media640 = explainMultiple.tgs['@media (min-width:600px)']
+
+            expect(media600.tgs['.obj1']).not.undefined
+            expect(media600.tgs['.obj2']).not.undefined
+            expect(media640.tgs['.obj1']).not.undefined
+            expect(media640.tgs['.obj2']).not.undefined
+
+        })
+
+
+        it('Render media queries of multiple parameter varians: should render both', () => {
+
+            const css = renderExplained(explainMultiple)
+
+            console.log(css)
+
+            expect(css).contain('.obj1 {position:relative;}')
+            expect(css).contain('.obj2 {position:relative;}')
+            expect(css).contain('.obj1 {margin:0;}')
+            expect(css).contain('.obj2 {margin:0;}')
+
+        })
+
     })
+
 
 })

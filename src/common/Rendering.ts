@@ -134,7 +134,7 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
         const contents = sheet[key as keyof(ThemeStyleSheets<T> | ContainedCSSProperties)]
 
         // refuse to process undefined values e.g. forbidden "media" keyword inside "mixins" or global scope
-        if(!contents) return;
+        if(!contents && contents !== 0) return;
 
         switch(true) {
 
@@ -229,7 +229,7 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
 
                 if(!ctx!.css) ctx!.css = [] as string[];
 
-                (ctx!.css as string[]).push(renderCSS({[key]: contents }))
+                (ctx!.css as string[]).push(renderCSS({[key]: contents as string | number }))
 
                 break;
 
