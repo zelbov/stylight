@@ -2,19 +2,19 @@ import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, The
 
 type RenderContext = {
 
-    nestedTargets : { target: string, css: string }[],
-    mediaTargets: { target: string, css: string }[],
-    mixinTargets: { target: string, css: string }[]
+    nt: { target: string, css: string }[],
+    mdt: { target: string, css: string }[],
+    mxt: { target: string, css: string }[]
 
 }
 
 const prepareContext = () : RenderContext => {
 
-    const nestedTargets : { target: string, css: string }[] = [];
-    const mediaTargets: { target: string, css: string }[] = [];
-    const mixinTargets: { target: string, css: string }[] = []
+    const nt : { target: string, css: string }[] = [];
+    const mdt: { target: string, css: string }[] = [];
+    const mxt: { target: string, css: string }[] = []
 
-    return { nestedTargets, mediaTargets, mixinTargets }
+    return { nt, mdt, mxt }
 
 }
 
@@ -113,7 +113,7 @@ const renderStyles = (
     context: RenderContext
 ) : string => {
 
-    const { nestedTargets, mediaTargets, mixinTargets } = context
+    const { nt, mdt, mxt } = context
 
     const result = Object.keys(props as CSSProperties).reduce((accumulator, key) => {
 
@@ -121,7 +121,7 @@ const renderStyles = (
 
             const mixins = prepareMixins(props as { mixins: ContainedMixins }, context)
 
-            mixinTargets.push(...mixins)
+            mxt.push(...mixins)
 
             return accumulator
 
@@ -131,7 +131,7 @@ const renderStyles = (
 
             const queries = prepareMediaQueries((props as ContainedCSSProperties).media as MediaQuery[], targetKey, context)
 
-            mediaTargets.push(...queries)
+            mdt.push(...queries)
 
             return accumulator;
 
@@ -143,7 +143,7 @@ const renderStyles = (
 
         if(nestedMatch) {
 
-            nestedTargets.push(prepareNestedTarget(props as ContainedCSSProperties, target, key, nestedMatch, context));
+            nt.push(prepareNestedTarget(props as ContainedCSSProperties, target, key, nestedMatch, context));
 
             return accumulator;
 
@@ -172,11 +172,11 @@ export const renderStyleSheet = <T extends Object>(theme: ThemeStyleSheets<T>) =
                 : ''
         ).join('')
         +`${
-            context.nestedTargets.length ? context.nestedTargets.map(t => t.css).join('') : ''
+            context.nt.length ? context.nt.map(t => t.css).join('') : ''
         }${
-            context.mediaTargets.length ? groupMediaQueries(context.mediaTargets) : ''
+            context.mdt.length ? groupMediaQueries(context.mdt) : ''
         }${
-            context.mixinTargets.length ? groupMixins(context.mixinTargets) : ''
+            context.mxt.length ? groupMixins(context.mxt) : ''
         }`
 
 }
