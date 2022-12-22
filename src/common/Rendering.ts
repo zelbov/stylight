@@ -30,13 +30,13 @@ const prepareScopedRenderContext : (target: string, type: RenderScopeType, backr
 
 }
 
-const renderScope = (scopeDescriptor: string, scopeCSS: string[]) : string =>
+const renderScope = (scopeDescriptor: string, scopeCSS: string[]) : string => 
     scopeCSS.length == 0 ? '' :
     scopeDescriptor != ''
         ? `${scopeDescriptor} {${
             scopeCSS.map(css => css+';').join('')
         }}`
-        : scopeCSS.map(css => css+';').join('')
+        : scopeCSS.join('')
 
 const renderScopeRecursive = (ctx: ScopedRenderContext, prefix: string = '') : string => {
 

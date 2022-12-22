@@ -209,7 +209,11 @@ describe('Explainer unit tests', () => {
 
         const explain = explainStyleSheet({
 
-            atRules: ['@import (...font)']
+            mixins: {
+
+                body: { atRules: ['@import (...font)'] }
+
+            }
 
         })
 
@@ -228,7 +232,7 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).eq('@import (...font);')
+            expect(css).eq('@import (...font)')
 
         })
 
@@ -388,5 +392,22 @@ describe('Explainer unit tests', () => {
 
     })
 
+    /*
+    describe('Combined features planning & rendering', () => {
+
+        it('Explain mixins inside media queries')
+        it('Render mixins inside media queries: should not reach outside media query scope')
+
+        it('Explain media queries inside top-level mixins')
+        it('Render media queries inside top-level mixins: should migrate to global scope')
+
+        it('Explain styles inside nested mixins')
+        it('Render styles inside nested mixins')
+
+        it('Explain media queries inside nested mixins')
+        it('Render media queries inside nested mixins')
+
+    })
+    */
 
 })
