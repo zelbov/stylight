@@ -4,3 +4,6 @@ import { createTheme } from './common/Theme'
 
 export { ThemeStyleSheets, CSSProperties } from './common/ThemeTypings'
 export { renderStyleSheet, styledClass, createTheme, explainStyleSheet, renderExplained }
+
+declare module 'stylight'
+declare module 'stylight/react'
