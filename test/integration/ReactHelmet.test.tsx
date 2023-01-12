@@ -1,7 +1,7 @@
 import 'mocha'
 import React from 'react'
 import { format as pretty } from 'prettier'
-import { createStyleRenderingContext, Styled, StyleRenderer, StyleRenderingContext, useStyle } from 'stylight/react'
+import { Styled, StyleRenderer, useStyle } from 'stylight/react'
 import { Helmet } from 'react-helmet'
 import { renderToString } from 'react-dom/server'
 import { expect } from 'chai'
@@ -18,41 +18,6 @@ describe('ReactHelmet integration testing', () => {
 
     }
 
-    it('Create react app with styling renderer wrapped into Helmet: should render styles in head', () => {
-
-        const App = () => 
-
-            <StyleRenderingContext.Provider value={createStyleRenderingContext()}>
-
-                <Helmet title='Helmet Test'/>
-
-                <StyledComponent/>
-
-                {
-                    // Option 1: Wrap CSS string into Helmet style property
-                }
-                <StyleRenderer wrapContent={ (cssText) => <Helmet style={[{ cssText }]}/> }/>
-
-                {
-                    // Option 2: wrap style tag with rendered CSS as child into Helmet
-                }
-                <StyleRenderer wrapElement={ (styleTag) => <Helmet>{styleTag}</Helmet> }/>
-
-            </StyleRenderingContext.Provider>
-
-        renderToString(<App/>)
-
-        const helmet = Helmet.renderStatic()
-
-        console.log(pretty(helmet.title.toString(), { parser: 'html' }))
-        console.log(pretty(helmet.style.toString(), { parser: 'html' }))
-
-        expect(helmet.title.toString()).contain('Helmet Test').and.contain('<title')
-
-        expect(helmet.style.toString()).contain('.obj {border:1px solid #000;}').and.contain('<style')
-
-    })
-
     it('Create React app with shorthand styling renderer and Helmet wrap: should render styles in head', () => {
 
         const App = () => <Styled>
@@ -61,7 +26,7 @@ describe('ReactHelmet integration testing', () => {
 
             <StyledComponent/>
 
-            <StyleRenderer wrapElement={ (styleTag) => <Helmet>{styleTag}</Helmet> }/>
+            <StyleRenderer wrap={ (styleTags) => <Helmet>{styleTags}</Helmet> }/>
 
         </Styled>
 

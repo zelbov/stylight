@@ -1,14 +1,17 @@
-import React, { useContext, createContext, useEffect, useState, createElement } from 'react'
+import React, { useContext, createContext, useEffect, createElement } from 'react'
 import { styledClass, renderStyleSheet, ThemeStyleSheets } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
+const ASYNC_STYLE_PARENT_MISSING = 'No parent element to append asynchronously appeared style'
+
+const HYDRATE_INDEXING_ATTRIBUTE_NAME = 'data-hydrate-idx'
 
 interface StyleEventListener {
     (evt: StyleRenderEvent): void
 }
 
 interface StyleEventListenerObject {
-    handleEvent(object: Event): void;
+    handleEvent(object: StyleRenderEvent): void;
 }
 
 declare interface StyleContextListener {
@@ -24,14 +27,13 @@ class StyleContextListener extends EventTarget {
         super();
         this._sources = [];
         this._renderedFlags = [];
-        this._cache = ''
     }
 
     private _sources: ThemeStyleSheets<any>[]
 
-    private _renderedFlags: boolean[];
+    public get sources() { return this._sources }
 
-    private _cache: string;
+    private _renderedFlags: boolean[];
 
     addStyles(styles: ThemeStyleSheets<any>){
         if(!this._sources.find($ => $ === styles)) {
@@ -39,19 +41,6 @@ class StyleContextListener extends EventTarget {
             this._renderedFlags.push(false)
             this.dispatchEvent(new StyleRenderEvent(styles))
         }
-    }
-
-    renderAll(){
-
-        this._sources.map(($, idx) => {
-            if(!this._renderedFlags[idx]) {
-                this._cache += renderStyleSheet($)
-                this._renderedFlags[idx] = true
-            }
-        })
-
-        return this._cache
-
     }
 
 }
@@ -96,8 +85,7 @@ export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
 interface StyleRendererProps {
 
     onrender?: () => void
-    wrapElement?: (element: React.ReactElement) => React.ReactElement
-    wrapContent?: (content: string) => React.ReactElement
+    wrap?: (element: React.ReactElement) => React.ReactElement
 
 }
 
@@ -107,28 +95,47 @@ export const StyleRenderer = (props: StyleRendererProps) => {
 
     if(!ctx) throw new Error(MISSING_RENDERING_CONTEXT_ERROR)
 
-    const [contents, setContents] = useState<string>(ctx.target.renderAll())
+    const { wrap } = props
 
-    function listenStyles() {
-        if(ctx) setContents(ctx.target.renderAll())
-        if(props.onrender) props.onrender()
-    }
+    const styles = ctx.target.sources.map(
+            (source) => renderStyleSheet(source)
+        ).join('')
 
-    ctx.target.addEventListener('style', listenStyles)
+    useEffect(() => {
 
-    useEffect(() => () => ctx.target.removeEventListener('style', listenStyles))
+        const listener : StyleEventListener = function(style) {
 
-    const { wrapElement, wrapContent } = props;
+            const current = document.querySelector(`style[${HYDRATE_INDEXING_ATTRIBUTE_NAME}="${ctx.target.sources.length - 1}"]`)
 
-    if(wrapElement) {
+            if(!current) {
 
-        return wrapElement(createElement('style', { type: 'text/css' }, contents))
+                const any = document.querySelector(`style[${HYDRATE_INDEXING_ATTRIBUTE_NAME}]`)
 
-    } else if (wrapContent) {
+                const parent = any ? any.parentElement : document.head
 
-        return wrapContent(contents)
-        
-    } else return createElement('style', { type: 'text/css' }, contents)
+                if(!parent) throw new Error(ASYNC_STYLE_PARENT_MISSING)
+
+                const append = document.createElement('style')
+                append.setAttribute(HYDRATE_INDEXING_ATTRIBUTE_NAME, ((ctx.target.sources.length || 1) - 1).toString())
+                append.innerText = renderStyleSheet(style.source)
+                parent.appendChild(append)
+
+            }
+
+        }
+
+        ctx.target.addEventListener('style', listener)
+
+        return () => ctx.target.removeEventListener('style', listener)
+
+    })
+
+    const element = createElement('style', {
+        type: 'text/css',
+        [HYDRATE_INDEXING_ATTRIBUTE_NAME]: 0
+    }, styles)
+
+    return wrap ? wrap(element) : element
 
 }
 
