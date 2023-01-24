@@ -4,7 +4,7 @@ const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requ
 const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
 
 const nestedCheckExpr = /^\&(?<target>(.|\s)+)/
-const cssKeyExpr = new RegExp(/[A-Z]/g)
+const cssKeyExpr = new RegExp(/(^m(?=s))|([A-Z])/g)
 
 type RenderScopeType = 'element' | 'nested' | 'media' | 'mixins' | 'global'
 
