@@ -1,7 +1,7 @@
-import { createTheme, explainStyleSheet, renderExplained, renderStyleSheet, styledClass } from "."
+import { createStyleSheet, explainStyleSheet, renderExplained, renderStyleSheet, styledClass } from "."
 
 // require
-module.exports = { renderStyleSheet, styledClass, createTheme, explainStyleSheet, renderExplained }
+module.exports = { renderStyleSheet, styledClass, createStyleSheet, explainStyleSheet, renderExplained }
 
 //@ts-ignore
 global.Stylight = module.exports // UMD

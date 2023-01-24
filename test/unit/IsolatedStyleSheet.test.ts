@@ -1,13 +1,13 @@
 import { expect } from 'chai'
 import 'mocha'
 import { format as pretty } from 'prettier'
-import { createTheme } from 'stylight'
+import { createStyleSheet } from 'stylight'
 
-describe('Theme unit testing', () => {
+describe('Isolated stylesheet unit testing', () => {
 
     it('Use `createTheme` call to instantiate class picking and rendering context with typings', () => {
 
-        const { styledClass, render } = createTheme({
+        const { styledClass, render } = createStyleSheet({
                 obj: { position: 'relative' },
                 obj2: { position: 'absolute' }
             }),

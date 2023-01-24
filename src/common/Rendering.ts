@@ -1,4 +1,5 @@
-import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, ThemeStyleSheets } from "./ThemeTypings";
+import { assignSeedString, DEFAULT_SEED_FUNCTION, SeedFunction, SeedStringOrFunction } from "./Seed";
+import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, ThemeStyleSheets } from "./SheetTypings";
 
 const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
 const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
@@ -125,7 +126,10 @@ const traverseToMediaHostDescriptor = (ctx: ScopedRenderContext) : string => {
 
 }
 
-const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | ContainedCSSProperties, ctx: ScopedRenderContext) => {
+const prepareScopedRenderPlan = <T extends Object>(
+    sheet: ThemeStyleSheets<T> | ContainedCSSProperties, ctx: ScopedRenderContext,
+    seed: SeedFunction
+) => {
 
     if(!ctx) ctx = prepareScopedRenderContext('', 'global');
 
@@ -158,7 +162,7 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
                         scopeCtx = (mxScope.tgs as {[key: string]: ScopedRenderContext })[target] =
                             prepareScopedRenderContext(target, 'mixins', mxScope)
 
-                    prepareScopedRenderPlan((contents as ContainedMixins)[key], scopeCtx)
+                    prepareScopedRenderPlan((contents as ContainedMixins)[key], scopeCtx, seed)
 
                 })
 
@@ -181,7 +185,7 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
 
                     mediaScope.tgs[currentScopeDescriptor] = prepareScopedRenderContext(currentScopeDescriptor, 'element', mediaScope)
 
-                    prepareScopedRenderPlan(query.css as ContainedCSSProperties, mediaScope.tgs[currentScopeDescriptor])
+                    prepareScopedRenderPlan(query.css as ContainedCSSProperties, mediaScope.tgs[currentScopeDescriptor], seed)
 
                 })
 
@@ -210,7 +214,7 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
                     const nestedCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })
                         [nestedTarget] = prepareScopedRenderContext(nestedTarget, 'nested', ctx)
                     
-                    prepareScopedRenderPlan(contents as ContainedCSSProperties, nestedCtx)
+                    prepareScopedRenderPlan(contents as ContainedCSSProperties, nestedCtx, seed)
 
                     break;
 
@@ -218,10 +222,10 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
 
             case ctx.type == 'global':
 
-                const target = '.'+key,
+                const target = '.'+seed(key),
                     scopeCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })[target] = prepareScopedRenderContext(target, 'element', ctx)
 
-                prepareScopedRenderPlan(contents as ContainedCSSProperties, scopeCtx)
+                prepareScopedRenderPlan(contents as ContainedCSSProperties, scopeCtx, seed)
 
                 break;
 
@@ -241,10 +245,13 @@ const prepareScopedRenderPlan = <T extends Object>(sheet: ThemeStyleSheets<T> | 
 
 }
 
-export const renderStyleSheet = <T extends Object>(sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>) => {
+export const renderStyleSheet = <T extends Object>(
+    sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>,
+    seed: SeedFunction = DEFAULT_SEED_FUNCTION
+) => {
 
     const ctx = prepareScopedRenderContext('', 'global'),
-        plan = prepareScopedRenderPlan(sheet, ctx),
+        plan = prepareScopedRenderPlan(sheet, ctx, seed),
         result = renderExplained(plan)
 
     // cleanup (GC)
@@ -254,8 +261,11 @@ export const renderStyleSheet = <T extends Object>(sheet: ThemeStyleSheets<T> | 
 
 }
 
-export const explainStyleSheet = <T extends Object>(sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>) => 
-    prepareScopedRenderPlan(sheet, prepareScopedRenderContext('', 'global'))
+export const explainStyleSheet = <T extends Object>(
+    sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>,
+    seed: SeedStringOrFunction = DEFAULT_SEED_FUNCTION
+) => 
+    prepareScopedRenderPlan(sheet, prepareScopedRenderContext('', 'global'), typeof(seed) == 'string' ? assignSeedString(seed) : seed)
 
 export const renderExplained = (ctx: ScopedRenderContext) => {
 
