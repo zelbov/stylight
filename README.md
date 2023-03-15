@@ -164,29 +164,97 @@ renderStyleSheet(styles)
 ***
 </br>
 
-- Not only rendering: styled class picker from provided styling object
+- Stylesheets: easily created, efficiently isolated, type completion for class name picker included!
 
-```TS
+```JS
 
-// styled_class.ts
+import { createStyleSheet, styledClass } from 'stylight'
 
-import { styledClass } from 'stylight'
+const { styledClass, render } = createStyleSheet({
 
-const styles = { menu: { margin: 'none' } }
+    parent: { margin: 0 },
+    child: { border: '1px solid #000' }
 
-// if using Typescript, for autocompletion support of class names, styling object type must be provided as generic type parameter
+})
 
-styledClass<typeof styles>(
-    'menu',
-    // null values are accepted in case when we need to apply class names conditionally, e.g. `row % 2 ? 'odd' : null`
-    null
+render() // -> ".parent {margin:0;}.child {border:1px solid #000;}"
+
+// supports type completion for class name picker 
+// from stylesheet property names
+styledClass('parent') // -> "parent"
+styledClass('child') // -> "child"
+
+```
+
+***
+</br>
+
+- Stylesheets also support seeding to identify, isolate, obfuscate, compress class names, or even all at once!
+
+```JS
+
+import { createStyleSheet, styledClass } from 'stylight'
+
+const { styledClass, render } = createStyleSheet(
+    // stylesheet properties
+    {
+
+        parent: { margin: 0 },
+        child: { border: '1px solid #000' }
+
+    },
+    // seed
+    'sheet!'
+
+    // by default, seeding algorithm for a seed of string type is `btoa(seed+className)`
+    // if you want to apply another algorithm, see custom seeding callback implementation example below
 )
 
-/*
+render()
+/* (pretty) 
 
-"menu"
+"
+.c2hlZXQhcGFyZW50 {
+    margin: 0;
+}
+
+.c2hlZXQhY2hpbGQ= {
+    border:1px solid #000;
+}
+"
 
 */
+
+styledClass('parent') // -> "c2hlZXQhcGFyZW50"
+styledClass('child') // -> "c2hlZXQhY2hpbGQ="
+
+```
+
+***
+</br>
+
+- Seeding with a custom class name transform function
+
+```JS
+
+import { createStyleSheet, styledClass } from 'stylight'
+
+const { styledClass, render } = createStyleSheet(
+    // stylesheet properties
+    {
+
+        parent: { margin: 0 },
+        child: { border: '1px solid #000' }
+
+    },
+    (className) => className.substring(0, 1)
+)
+
+render() // -> ".p {margin:0;}.c {border:1px solid #000;}"
+
+styledClass('parent') // -> "p"
+styledClass('child') // -> "c"
+
 ```
 
 ***
@@ -333,7 +401,7 @@ renderToString(<App/>)
 
 ## Also
 
-- Made with Typescript, type completion friendly. You'll like the way it works for you when you define objects, their styles, their children and their styles, and so on, and so on.
+- Made with Typescript, TOTALLY type completion friendly!
 
 - *Almost* zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
 
