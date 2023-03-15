@@ -405,7 +405,7 @@ renderToString(<App/>)
 
 - *Almost* zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
 
-- Lightweight - minified bundle size is only around 4KB, React integration plugin is about 2KB of total size.
+- Lightweight - minified bundle size is only around 4.4 KB, React integration plugin is about 2.5 KB of additional size.
 
 - Great performance. No more IDE lags during typechecks of simple stylings applied. You know what I mean if you know what I mean.
 
@@ -431,11 +431,11 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.4.4/umd/stylight.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.1/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.4.4/umd/stylight.react.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.1/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
@@ -450,12 +450,7 @@ There are two conditional requirements for this package to use.
 - `Typescript` >= `4.1` must be used as default TS server in case of using type completions, and installed as a [dev]dependency for Typescript projects aswell. A package uses [Template Literal Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html#template-literal-types) feature introduced in this version, so earlier versions of Typescript used will most likely cause problems. However, for Javascript projects without type completions both in a project and IDE, no Typescript version requirements are applied.
 - In case of using `React`, versions `16` and higher are considered supported since no tests for lower versions are done. A package relies on React as an optional dependency only, in case React is actually used in a host project
 
-## TODO (planned for future releases)
+## TODO
 
 - Media queries (DOC)
-- At-rules (others aside of media queries)
-- Class names transformers for `styledClass` (compression/obfuscation for rendered class names)
-
-## Known bugs / issues
-
-- Mixins are sometimes rendered outside their initial media query scope
+- At-rules (other than just media queries)
