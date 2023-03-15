@@ -1,5 +1,5 @@
 import { assignSeedString, DEFAULT_SEED_FUNCTION, SeedFunction, SeedStringOrFunction } from "./Seed";
-import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, ThemeStyleSheets } from "./SheetTypings";
+import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, StyleSheetObject } from "./SheetTypings";
 
 const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
 const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
@@ -127,7 +127,7 @@ const traverseToMediaHostDescriptor = (ctx: ScopedRenderContext) : string => {
 }
 
 const prepareScopedRenderPlan = <T extends Object>(
-    sheet: ThemeStyleSheets<T> | ContainedCSSProperties, ctx: ScopedRenderContext,
+    sheet: StyleSheetObject<T> | ContainedCSSProperties, ctx: ScopedRenderContext,
     seed: SeedFunction
 ) => {
 
@@ -135,7 +135,7 @@ const prepareScopedRenderPlan = <T extends Object>(
 
     (Object.keys(sheet)).map(key => {
 
-        const contents = sheet[key as keyof(ThemeStyleSheets<T> | ContainedCSSProperties)]
+        const contents = sheet[key as keyof(StyleSheetObject<T> | ContainedCSSProperties)]
 
         // refuse to process undefined values e.g. forbidden "media" keyword inside "mixins" or global scope
         if(!contents && contents !== 0) return;
@@ -246,7 +246,7 @@ const prepareScopedRenderPlan = <T extends Object>(
 }
 
 export const renderStyleSheet = <T extends Object>(
-    sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>,
+    sheet: StyleSheetObject<T> | Omit<ContainedCSSProperties, 'media'>,
     seed: SeedFunction = DEFAULT_SEED_FUNCTION
 ) => {
 
@@ -262,7 +262,7 @@ export const renderStyleSheet = <T extends Object>(
 }
 
 export const explainStyleSheet = <T extends Object>(
-    sheet: ThemeStyleSheets<T> | Omit<ContainedCSSProperties, 'media'>,
+    sheet: StyleSheetObject<T> | Omit<ContainedCSSProperties, 'media'>,
     seed: SeedStringOrFunction = DEFAULT_SEED_FUNCTION
 ) => 
     prepareScopedRenderPlan(sheet, prepareScopedRenderContext('', 'global'), typeof(seed) == 'string' ? assignSeedString(seed) : seed)

@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useEffect, createElement } from 'react'
-import { styledClass, renderStyleSheet, ThemeStyleSheets } from 'stylight';
+import { StyleSheetInit } from 'src/common/Isolated';
+import { styledClass, renderStyleSheet, StyleSheetObject } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
 const ASYNC_STYLE_PARENT_MISSING = 'No parent element to append asynchronously appeared style'
@@ -29,13 +30,13 @@ class StyleContextListener extends EventTarget {
         this._renderedFlags = [];
     }
 
-    private _sources: ThemeStyleSheets<any>[]
+    private _sources: (StyleSheetObject<any> | StyleSheetInit<any>)[]
 
     public get sources() { return this._sources }
 
     private _renderedFlags: boolean[];
 
-    addStyles(styles: ThemeStyleSheets<any>){
+    addStyles(styles: StyleSheetObject<any> | StyleSheetInit<any>){
         if(!this._sources.find($ => $ === styles)) {
             this._sources.push(styles)
             this._renderedFlags.push(false)
@@ -47,9 +48,9 @@ class StyleContextListener extends EventTarget {
 
 class StyleRenderEvent extends Event {
 
-    private _source: ThemeStyleSheets<any>
+    private _source: StyleSheetObject<any> | StyleSheetInit<any>
 
-    constructor(source: ThemeStyleSheets<any>){
+    constructor(source: StyleSheetObject<any> | StyleSheetInit<any>){
         super('style')
         this._source = source
     }
@@ -70,7 +71,9 @@ export const createStyleRenderingContext = () => {
 
 export const StyleRenderingContext = createContext<StyleRenderingContextValue | null>(null)
 
-export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
+export const useStyle = <T extends Object>(
+    source: StyleSheetObject<T> | StyleSheetInit<T>
+) => {
 
     const ctx = useContext(StyleRenderingContext)
 
@@ -78,7 +81,10 @@ export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
 
     ctx.target.addStyles(source)
 
-    return (...keys: (keyof Omit<ThemeStyleSheets<T>, 'mixins'> | null | undefined | String)[]) => styledClass(...keys)
+    if((source as StyleSheetInit<T>).styledClass)
+        return (source as StyleSheetInit<T>).styledClass
+
+    return (...keys: (keyof Omit<StyleSheetObject<T>, 'mixins'> | null | undefined | String)[]) => styledClass(...keys)
 
 }
 
@@ -98,7 +104,7 @@ export const StyleRenderer = (props: StyleRendererProps) => {
     const { wrap } = props
 
     const styles = ctx.target.sources.map(
-            (source) => renderStyleSheet(source)
+            (source) => (source.styles && source.styledClass) ? (source as StyleSheetInit<any>).render() : renderStyleSheet(source)
         ).join('')
 
     useEffect(() => {

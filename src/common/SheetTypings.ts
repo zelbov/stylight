@@ -37,11 +37,11 @@ export type ContainedMixins = {
     [key: string]: ContainedCSSProperties & { mixins?: never }
 } & { mixins?: never, media?: never}
 
-type ThemeContainedSheet <T> = {
+type ContainedStyleSheet <T> = {
     [P in keyof T]?: ContainedCSSProperties;
 }
 
-export type ThemeStyleSheets<T> = 
-& ThemeContainedSheet<T> & {
+export type StyleSheetObject<T> = 
+& ContainedStyleSheet<T> & {
     mixins?: ContainedMixins
 }
