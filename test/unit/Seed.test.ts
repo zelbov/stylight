@@ -17,6 +17,7 @@ describe('Seeding unit testing', () => {
             console.log(result)
 
             expect(result).contain('.'+btoa('foobar'))
+            expect(sheet.styledClass('bar')).eq(btoa('foobar'))
 
         })
 
@@ -40,6 +41,7 @@ describe('Seeding unit testing', () => {
 
             expect(result).contain('.'+btoa('foobar'))
             expect(result).contain('.'+btoa('foobar')+' div')
+            expect(sheet.styledClass('bar')).eq(btoa('foobar'))
 
         })
 
@@ -47,7 +49,24 @@ describe('Seeding unit testing', () => {
 
     describe('Isolated sheets with custom seed function', () => {
 
-        //TODO: add tests for custom seed function
+        it('Custom transform callback for class names', () => {
+
+            const { styledClass, render } = createStyleSheet(
+                {
+            
+                    parent: { margin: 0 },
+                    child: { border: '1px solid #000' }
+            
+                },
+                (className) => className.substring(0, 1)
+            )
+            
+            expect(render()).contain('.p {margin:0;}.c {border:1px solid #000;}')
+
+            expect(styledClass('parent')).eq('p')
+            expect(styledClass('child')).eq('c')
+
+        })
 
     })
 

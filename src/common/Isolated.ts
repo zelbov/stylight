@@ -17,10 +17,14 @@ export const createStyleSheet = <T extends Object>(
     seed: SeedStringOrFunction = DEFAULT_SEED_FUNCTION
 ) : ThemeInit<T> => {
 
+    const seedAlgorithm = typeof(seed) == 'string' ? assignSeedString(seed) : seed
+
     return {
         styles: theme,
-        styledClass: styledClass<T>,
-        render: () => renderStyleSheet(theme, typeof(seed) == 'string' ? assignSeedString(seed) : seed)
+        styledClass: <T extends Object>(...keys: (keyof Omit<ThemeStyleSheets<T>, 'mixins'> | null | undefined | String)[]) => styledClass<T>(
+            ...(keys.map($ => typeof($) == 'string' ? seedAlgorithm($) : undefined))
+        ),
+        render: () => renderStyleSheet(theme, seedAlgorithm)
     }
 
 }
