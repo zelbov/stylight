@@ -29,7 +29,7 @@ renderStyleSheet(styles)
 ***
 </br>
 
-- Nested style properties definition straight in JS style objects hierarchy, applying styles to children by using `'& <child_id>'` (see examples above)
+- Nested style properties definition straight in JS style objects hierarchy, applying styles to children by using `'& <child_id>'` (see example below)
 
 ```JS
 
@@ -431,11 +431,11 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.1/umd/stylight.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.2/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.1/umd/stylight.react.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.2/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
