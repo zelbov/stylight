@@ -1,8 +1,8 @@
 import { ThemeStyleSheets } from "./SheetTypings";
 
 
-export const styledClass = <T extends Object>(...keys: (keyof Omit<ThemeStyleSheets<T>, 'mixins'> | null)[]) => {
+export const styledClass = <T extends Object>(...keys: (keyof Omit<ThemeStyleSheets<T>, 'mixins'> | null | undefined | String)[]) => {
 
-    return keys.filter($ => $ !== null).join(' ');
+    return keys.filter($ => $ !== null && $ !== undefined).join(' ');
 
 }

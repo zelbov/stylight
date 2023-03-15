@@ -78,7 +78,7 @@ export const useStyle = <T extends Object>(source: ThemeStyleSheets<T>) => {
 
     ctx.target.addStyles(source)
 
-    return (...keys: (keyof Omit<typeof source, 'mixins'> | null)[]) => styledClass(...keys)
+    return (...keys: (keyof Omit<ThemeStyleSheets<T>, 'mixins'> | null | undefined | String)[]) => styledClass(...keys)
 
 }
 
