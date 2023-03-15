@@ -30,7 +30,7 @@ module.exports = function(env, args) {
         target: 'web',
         mode: 'production',
         devtool: args.mode == 'production' ? undefined : 'inline-source-map',
-        watch: args.mode == 'production' ? false : true
+        watch: false
     
     }
 
