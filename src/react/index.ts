@@ -1,6 +1,5 @@
 import React, { useContext, createContext, useEffect, createElement } from 'react'
-import { StyleSheetInit } from 'src/common/Isolated';
-import { styledClass, renderStyleSheet, StyleSheetObject } from 'stylight';
+import { styledClass, renderStyleSheet, StyleSheetObject, StyleSheetInit } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
 const ASYNC_STYLE_PARENT_MISSING = 'No parent element to append asynchronously appeared style'
