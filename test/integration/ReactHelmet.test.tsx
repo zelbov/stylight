@@ -39,7 +39,7 @@ describe('ReactHelmet integration testing', () => {
 
         expect(helmet.title.toString()).contain('Helmet Test #2').and.contain('<title')
 
-        expect(helmet.style.toString()).contain('.obj {border:1px solid #000;}').and.contain('<style')
+        expect(helmet.style.toString()).contain('.obj {border:1px solid #000}').and.contain('<style')
 
     })
 

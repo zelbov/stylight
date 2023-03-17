@@ -28,7 +28,7 @@ describe('Explainer unit tests', () => {
     
             console.log(css)
 
-            expect(css).contain('.menu {border:1px solid #000;}')
+            expect(css).contain('.menu {border:1px solid #000}')
     
         })
 
@@ -76,9 +76,9 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.menu {border:1px solid #000;}')
-            expect(css).contain('.menu div {background:red;}')
-            expect(css).contain('.menu.blue {background:blue;}')
+            expect(css).contain('.menu {border:1px solid #000}')
+            expect(css).contain('.menu div {background:red}')
+            expect(css).contain('.menu.blue {background:blue}')
 
         })
 
@@ -114,7 +114,7 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.menu {background:#fff;background:#000;}')
+            expect(css).contain('.menu {background:#fff;background:#000}')
 
         })
 
@@ -151,8 +151,8 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('body {margin:0;}').and.not.contain('.body')
-            expect(css).contain('a {text-decoration:none;}').and.not.contain('.a')
+            expect(css).contain('body {margin:0}').and.not.contain('.body')
+            expect(css).contain('a {text-decoration:none}').and.not.contain('.a')
 
         })
 
@@ -196,10 +196,10 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.menu {border:none;}')
-            expect(css).contain('.menu a {border:1px solid #000;}')
-            expect(css).contain('body {margin:0;}').and.not.contain('.body')
-            expect(css).contain('a {text-decoration:none;}').and.not.contain('.a')
+            expect(css).contain('.menu {border:none}')
+            expect(css).contain('.menu a {border:1px solid #000}')
+            expect(css).contain('body {margin:0}').and.not.contain('.body')
+            expect(css).contain('a {text-decoration:none}').and.not.contain('.a')
 
         })
 
@@ -268,8 +268,8 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.menu {width:600px;}')
-            expect(css).contain('@media (max-width:1280px){.menu {width:400px;}}')
+            expect(css).contain('.menu {width:600px}')
+            expect(css).contain('@media (max-width:1280px){.menu {width:400px}}')
 
         })
 
@@ -320,9 +320,9 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.menu {width:600px;}')
-            expect(css).contain('.menu div {position:relative;}')
-            expect(css).contain('@media (max-width:1280px){.menu {width:400px;}.menu div {position:absolute;}}')
+            expect(css).contain('.menu {width:600px}')
+            expect(css).contain('.menu div {position:relative}')
+            expect(css).contain('@media (max-width:1280px){.menu {width:400px}.menu div {position:absolute}}')
 
         })
 
@@ -383,10 +383,10 @@ describe('Explainer unit tests', () => {
 
             console.log(css)
 
-            expect(css).contain('.obj1 {position:relative;}')
-            expect(css).contain('.obj2 {position:relative;}')
-            expect(css).contain('.obj1 {margin:0;}')
-            expect(css).contain('.obj2 {margin:0;}')
+            expect(css).contain('.obj1 {position:relative}')
+            expect(css).contain('.obj2 {position:relative}')
+            expect(css).contain('.obj1 {margin:0}')
+            expect(css).contain('.obj2 {margin:0}')
 
         })
 

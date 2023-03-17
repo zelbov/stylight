@@ -18,7 +18,7 @@ describe('Isolated stylesheet unit testing', () => {
 
         expect(styledClass('obj')).eq('obj')
 
-        expect(css).contain('.obj {position:relative;}')
+        expect(css).contain('.obj {position:relative}')
 
     })
 

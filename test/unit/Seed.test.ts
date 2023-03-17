@@ -61,7 +61,7 @@ describe('Seeding unit testing', () => {
                 (className) => className.substring(0, 1)
             )
             
-            expect(render()).contain('.p {margin:0;}.c {border:1px solid #000;}')
+            expect(render()).contain('.p {margin:0}.c {border:1px solid #000}')
 
             expect(styledClass('parent')).eq('p')
             expect(styledClass('child')).eq('c')

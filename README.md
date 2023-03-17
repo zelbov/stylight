@@ -21,7 +21,7 @@ renderStyleSheet(styles)
 
 /*
 
-".menu {border-bottom:1px solid #000;}"
+".menu {border-bottom:1px solid #000}"
 
 */
 ```
@@ -51,8 +51,8 @@ renderStyleSheet(styles)
 /*
 
 "
-.menu {border:1px solid #000;}
-.menu div {background-color:red;}
+.menu {border:1px solid #000}
+.menu div {background-color:red}
 "
 
 */
@@ -154,7 +154,7 @@ renderStyleSheet(styles)
 
 /*
 
-"body {margin:none;}"
+"body {margin:none}"
 
 */
 
@@ -177,7 +177,7 @@ const { styledClass, render } = createStyleSheet({
 
 })
 
-render() // -> ".parent {margin:0;}.child {border:1px solid #000;}"
+render() // -> ".parent {margin:0}.child {border:1px solid #000}"
 
 // supports type completion for class name picker 
 // from stylesheet property names
@@ -250,7 +250,7 @@ const { styledClass, render } = createStyleSheet(
     (className) => className.substring(0, 1)
 )
 
-render() // -> ".p {margin:0;}.c {border:1px solid #000;}"
+render() // -> ".p {margin:0}.c {border:1px solid #000}"
 
 styledClass('parent') // -> "p"
 styledClass('child') // -> "c"
@@ -317,7 +317,7 @@ renderToString(<App/>)
 "
 <div class="obj"></div>
 <style>
-    .obj {border:1px solid #000;}
+    .obj {border:1px solid #000}
 </style>
 "
 
@@ -387,7 +387,7 @@ renderToString(<App/>)
 "
 <div class="obj"></div>
 <style>
-    .obj {border:1px solid #000;}
+    .obj {border:1px solid #000}
 </style>
 "
 

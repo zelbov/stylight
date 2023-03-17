@@ -32,7 +32,7 @@ describe('React integration testing', () => {
 
         console.log(pretty(str, { parser: 'html' }))
 
-        expect(str).contain('.obj {border:1px solid #000;}')
+        expect(str).contain('.obj {border:1px solid #000}')
 
     })
 
@@ -45,7 +45,7 @@ describe('React integration testing', () => {
             rendered = renderToString(<App/>)
 
         console.log(pretty(rendered, { parser: 'html' }))
-        expect(rendered).contain('.obj {border:1px solid #000;}')
+        expect(rendered).contain('.obj {border:1px solid #000}')
 
     })
 
