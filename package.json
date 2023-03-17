@@ -1,6 +1,6 @@
 {
   "name": "stylight",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
   "main": "./dist/src/index.js",
   "scripts": {
