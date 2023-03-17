@@ -1,5 +1,5 @@
 import { assignSeedString, DEFAULT_SEED_FUNCTION, SeedFunction, SeedStringOrFunction } from "./Seed";
-import { ContainedCSSProperties, ContainedMixins, CSSProperties, MediaQuery, StyleSheetObject } from "./SheetTypings";
+import { ContainedCSSProperties, ContainedMixins, CSSProperties, KeyframesRule, KeyframesStepFromTo, KeyframesStepPercentage, MediaQuery, StyleSheetObject } from "./SheetTypings";
 
 const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
 const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
@@ -48,12 +48,47 @@ const renderScopeRecursive = (ctx: ScopedRenderContext, prefix: string = '') : s
         prefix, (ctx as ScopedRenderContext).css as string[]
     )
 
+    //TODO: map render process handlers by scope context type
     let inner = ctx.type != 'media'
         ? Object.keys(ctx.tgs).map($ => renderScopeRecursive(ctx.tgs[$], prefix)).join('')
         : ctx.cs+`{${Object.keys(ctx.tgs).map($ => renderScopeRecursive(ctx.tgs[$], '')).join('')}}`
     
     return accumulator + inner
 
+
+}
+
+const renderKeyframes = (rules: KeyframesRule[]) : string => {
+
+    return rules.map($ => {
+
+        const target = `@keyframes ${$.name}`,
+            contents = $.steps.map(step => {
+
+                let result = ''
+
+                if((step as KeyframesStepPercentage).css) {
+
+                    result += `${(step as KeyframesStepPercentage).percentage}% {${
+                        renderCSS((step as KeyframesStepPercentage).css)
+                    }}`
+
+                }
+
+                for(let target of (['from', 'to'] as ('from' | 'to')[])) {
+
+                    if((step as KeyframesStepFromTo)[target])
+                        result += `${target} {${renderCSS((step as KeyframesStepFromTo)[target])}}`
+
+                }
+
+                return result
+
+            }).join('')
+
+        return `${target}{${contents}}`
+
+    }).join('')
 
 }
 
@@ -101,7 +136,7 @@ const renderCSS = (props: CSSProperties) => {
 
 }
 
-const traverseToMediaHostDescriptor = (ctx: ScopedRenderContext) : string => {
+const traverseToHostDescriptor = (ctx: ScopedRenderContext) : string => {
 
     let scope = ctx,
         descriptor = ctx.cs
@@ -142,6 +177,8 @@ const prepareScopedRenderPlan = <T extends Object>(
 
         switch(true) {
 
+            //TODO: move handlers for explicit keys conditions to a mapped handlers registry
+
             case key == 'atRules': 
 
                 const atScope = ctx.type == 'global' ? ctx : traverseBackrefs(ctx!)
@@ -149,6 +186,16 @@ const prepareScopedRenderPlan = <T extends Object>(
                 if(!atScope.css) atScope.css = []
 
                 atScope.css.push(...contents as string[])
+
+                break;
+
+            case key == 'keyframes':
+
+                let kfScope = traverseBackrefs(ctx!)
+
+                if(!kfScope.css) kfScope.css = []
+
+                kfScope.css.push(renderKeyframes(contents as KeyframesRule[]))
 
                 break;
 
@@ -171,7 +218,7 @@ const prepareScopedRenderPlan = <T extends Object>(
             case key == 'media':
                 
                 let globalScope = traverseBackrefs(ctx!),
-                    currentScopeDescriptor = traverseToMediaHostDescriptor(ctx);
+                    currentScopeDescriptor = traverseToHostDescriptor(ctx);
 
                 (contents as MediaQuery[]).map(query => {
 

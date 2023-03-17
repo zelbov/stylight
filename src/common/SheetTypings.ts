@@ -24,18 +24,45 @@ extends MediaFeatures, ResolutionMediaFeatures
     css: Omit<ContainedCSSProperties, 'media'>
 }
 
+type DigitLiteral = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+export type PercentageLiteral = 
+`${Exclude<DigitLiteral, 0> | ''}${DigitLiteral}` | '100'
+
+export type KeyframesStepPercentage = {
+
+    percentage: PercentageLiteral
+    css: CSSProperties
+
+}
+
+export type KeyframesStepFromTo = {
+
+    from: CSSProperties,
+    to: CSSProperties
+
+}
+
+export type KeyframesRule = {
+
+    name: string
+    steps: (KeyframesStepPercentage | KeyframesStepFromTo)[]
+
+}
+
 export interface ContainedCSSProperties extends CSSProperties {
 
     [key: `&${string}`]: ContainedCSSProperties,
     overrides?: CSSProperties[]
     atRules?: string[],
+    keyframes?: KeyframesRule[],
     media?: MediaQuery[],
     mixins?: ContainedMixins
 }
 
 export type ContainedMixins = {
     [key: string]: ContainedCSSProperties & { mixins?: never }
-} & { mixins?: never, media?: never}
+} & { mixins?: never, media?: never }
 
 type ContainedStyleSheet <T> = {
     [P in keyof T]?: ContainedCSSProperties;
