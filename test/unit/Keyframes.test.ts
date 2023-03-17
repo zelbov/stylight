@@ -164,4 +164,57 @@ describe('Keyframes rule unit testing', () => {
 
     })
 
+    describe('Multiple keyframes rendering', () => {
+
+        it('Define 2 keyframes rules in a single sheet: should produce valid CSS on render', () => {
+
+            const { render } = createStyleSheet({
+
+                foo: {
+
+                    keyframes: [{
+                        name: 'animateFoo',
+                        steps: [{
+                            from: { background: '#000' },
+                            to: { background: '#fff' }
+                        }]
+                    }],
+
+                    animationName: 'animateFoo',
+                    animationDuration: '.5s'
+
+                },
+                bar: {
+
+                    keyframes: [{
+                        name: 'animateBar',
+                        steps: [{
+                            from: { background: '#000' },
+                            to: { background: '#fff' }
+                        }]
+                    }],
+
+                    animationName: 'animateBar',
+                    animationDuration: '.5s'
+
+                }
+
+            })
+
+            const css = render()
+
+            expect(css).contain('@keyframes animateFoo{from {background:#000}to {background:#fff}}')
+            expect(css).contain('@keyframes animateBar{from {background:#000}to {background:#fff}}')
+            expect(css).contain('.foo {animation-name:animateFoo;animation-duration:.5s}')
+            expect(css).contain('.bar {animation-name:animateBar;animation-duration:.5s}')
+
+            // should not produce global-scoped rules with semicolon separation
+
+            expect(css).not.contain('};')
+
+
+        })
+
+    })
+
 })

@@ -37,7 +37,7 @@ const renderScope = (scopeDescriptor: string, scopeCSS: string[]) : string =>
         ? `${scopeDescriptor} {${
             scopeCSS.join(';')
         }}`
-        : scopeCSS.join(';')
+        : scopeCSS.join('')
 
 const renderScopeRecursive = (ctx: ScopedRenderContext, prefix: string = '') : string => {
 
