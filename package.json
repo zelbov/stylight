@@ -10,7 +10,7 @@
     "lint": "npx eslint --ext ts",
     "clean": "rm -rf ./dist && rm -rf ./umd",
     "prep": "npm run clean && npm i && npm run build && npm run bundle-dev",
-    "test": "npm run build && npx mocha -r source-map-support/register -r module-alias/register ./dist/test/**/*.js --no-deprecation"
+    "test": "npx tsc && npx mocha -r source-map-support/register -r module-alias/register ./dist/test/**/*.js --no-deprecation"
   },
   "types": "./dist/src/index.d.ts",
   "exports": {
