@@ -65,4 +65,52 @@ describe('MediaQueries unit testing', () => {
 
     })
 
+    describe('Mixins scoping inside media queries', () => {
+
+        it('Render mixins within media query scope', () => {
+
+            const sheet = renderStyleSheet({
+
+                mixins: {
+
+                    body: {
+
+                        marginTop: '0'
+
+                    }
+
+                },
+            
+                foo: {
+    
+                    media: [{
+    
+                        "max-width": '800px',
+    
+                        css: {
+    
+                            mixins: {
+    
+                                body: {
+    
+                                    margin: '0'
+    
+                                }
+    
+                            }
+    
+                        }
+    
+                    }]
+    
+                }
+    
+            })
+    
+            expect(sheet).eq('body {margin-top:0}@media (max-width:800px){body {margin:0}}')
+
+        })
+
+    })
+
 })
