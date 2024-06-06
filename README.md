@@ -62,6 +62,36 @@ renderStyleSheet(styles)
 ***
 </br>
 
+- Repeating nested style selector in a property descriptor is also supported:
+
+```JS
+
+// nested_multi.js
+
+import { renderStyleSheet } from 'stylight'
+
+const styles = {
+    foo: {
+        '& h1, & h2': {
+            fontSize: '16px'
+        }
+    }
+}
+
+renderStyleSheet(styles)
+
+/*
+
+".foo h1, .foo h2 {font-size:16px}"
+
+*/
+
+
+```
+
+***
+</br>
+
 - Property overrides for same CSS property for different target renderer platforms
 
 ```JS
@@ -155,6 +185,38 @@ renderStyleSheet(styles)
 /*
 
 "body {margin:none}"
+
+*/
+
+
+```
+
+***
+</br>
+
+- Mixins can be also combined with selectors nesting to use a nested target as a succeeding selector part, like this:
+
+```JS
+
+// nested_mixins.js
+
+import { renderStyleSheet } from 'stylight'
+
+const styles = {
+    foo: {
+        mixins: {
+            'h1&, h2&': {
+                fontSize: '16px'
+            }
+        }
+    }
+}
+
+renderStyleSheet(styles)
+
+/*
+
+"h1.foo, h2.foo {font-size:16px}"
 
 */
 
@@ -431,11 +493,11 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.5/umd/stylight.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.6/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.5/umd/stylight.react.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.6/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
