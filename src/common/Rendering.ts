@@ -256,12 +256,13 @@ const prepareScopedRenderPlan = <T extends Object>(
 
                 if(match) {
 
-                    const nestedTarget = match.groups!.target;
+                    const nestedTarget = match.groups!.target,
+                        sheet = contents as ContainedCSSProperties
                     
                     const nestedCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })
                         [nestedTarget] = prepareScopedRenderContext(nestedTarget, 'nested', ctx)
                     
-                    prepareScopedRenderPlan(contents as ContainedCSSProperties, nestedCtx, seed)
+                    prepareScopedRenderPlan(sheet, nestedCtx, seed)
 
                     break;
 
@@ -270,9 +271,10 @@ const prepareScopedRenderPlan = <T extends Object>(
             case ctx.type == 'global':
 
                 const target = '.'+seed(key),
-                    scopeCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })[target] = prepareScopedRenderContext(target, 'element', ctx)
+                    scopeCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })[target] = prepareScopedRenderContext(target, 'element', ctx),
+                    sheet = contents as ContainedCSSProperties
 
-                prepareScopedRenderPlan(contents as ContainedCSSProperties, scopeCtx, seed)
+                prepareScopedRenderPlan(sheet, scopeCtx, seed)
 
                 break;
 
