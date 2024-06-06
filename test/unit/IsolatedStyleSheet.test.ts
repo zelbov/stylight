@@ -5,7 +5,7 @@ import { createStyleSheet } from 'stylight'
 
 describe('Isolated stylesheet unit testing', () => {
 
-    it('Use `createTheme` call to instantiate class picking and rendering context with typings', () => {
+    it('Use `createStyleSheet` call to instantiate class picking and rendering context with typings', () => {
 
         const { styledClass, render } = createStyleSheet({
                 obj: { position: 'relative' },

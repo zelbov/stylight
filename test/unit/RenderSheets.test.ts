@@ -156,4 +156,44 @@ describe('Style rendering unit testing', () => {
 
     })
 
+    it('Render multiple selectors in a nested style def', () => {
+
+        const sheet = renderStyleSheet({
+            foo: {
+
+                '& h1, & h2': {
+
+                    fontSize: '16px'
+
+                }
+
+            }
+        })
+
+        expect(sheet).eq('.foo h1, .foo h2 {font-size:16px}')
+
+    })
+
+    it('Render class selector appended to element selector as a mixin: should replace amp with class name', () => {
+
+        const sheet = renderStyleSheet({
+            foo: {
+
+                mixins: {
+
+                    'h1&, h2&': {
+
+                        fontSize: '16px'
+
+                    }
+
+                }
+
+            }
+        })
+
+        expect(sheet).eq('h1.foo, h2.foo {font-size:16px}')
+
+    })
+
 })

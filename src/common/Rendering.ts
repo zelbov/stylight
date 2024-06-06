@@ -2,9 +2,6 @@ import { assignSeedString, DEFAULT_SEED_FUNCTION, SeedFunction, SeedStringOrFunc
 import { ContainedCSSProperties, ContainedMixins, CSSProperties, KeyframesRule, KeyframesStepFromTo, KeyframesStepPercentage, MediaQuery, StyleSheetObject } from "./SheetTypings";
 
 const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
-const NESTED_DESCRIPTOR_INVALID = (descriptor: string) => 'Nested style descriptor provided with invalid syntax: '+descriptor
-
-const nestedCheckExpr = /^\&(?<target>(.|\s)+)/
 const cssKeyExpr = new RegExp(/(^m(?=s))|([A-Z])/g)
 
 type RenderScopeType = 'element' | 'nested' | 'media' | 'mixins' | 'global'
@@ -205,7 +202,7 @@ const prepareScopedRenderPlan = <T extends Object>(
 
                 (Object.keys(contents as ContainedMixins)).map(key => {
 
-                    const target = key,
+                    const target = key.replaceAll(/\&/g, ctx.cs),
                         scopeCtx = (mxScope.tgs as {[key: string]: ScopedRenderContext })[target] =
                             prepareScopedRenderContext(target, 'mixins', mxScope)
 
@@ -250,23 +247,17 @@ const prepareScopedRenderPlan = <T extends Object>(
 
                 break;
 
-            case typeof(key) == 'string' && key[0] == '&':
+            case typeof(key) == 'string' && !!key.match(/^\&/):
 
-                const match = key.match(nestedCheckExpr);
+                const nestedTarget = key.replace(/^\&/, '').replaceAll(/\&/g, ctx.cs),
+                    styles = contents as ContainedCSSProperties
+                
+                const nestedCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })
+                    [nestedTarget] = prepareScopedRenderContext(nestedTarget, 'nested', ctx)
+                
+                prepareScopedRenderPlan(styles, nestedCtx, seed)
 
-                if(match) {
-
-                    const nestedTarget = match.groups!.target,
-                        sheet = contents as ContainedCSSProperties
-                    
-                    const nestedCtx = (ctx!.tgs as {[key: string]: ScopedRenderContext })
-                        [nestedTarget] = prepareScopedRenderContext(nestedTarget, 'nested', ctx)
-                    
-                    prepareScopedRenderPlan(sheet, nestedCtx, seed)
-
-                    break;
-
-                } else throw new Error(NESTED_DESCRIPTOR_INVALID(key))
+                break;
 
             case ctx.type == 'global':
 
