@@ -392,4 +392,39 @@ describe('Explainer unit tests', () => {
 
     })
 
+    describe('Void scopes planning & rendering', () => {
+
+        it('Explain & render empty selector scope: should not produce any actual CSS', () => {
+
+            const explained = explainStyleSheet({
+                foo: {}
+            })
+
+            // should include empty selector scope into planner
+            expect(explained.tgs['.foo']).not.undefined
+
+            // but never produce actual CSS for this scope
+            expect(renderExplained(explained)).eq('')
+
+        })
+
+        it('Explain a selector scope with only empty nested target scope', () => {
+
+            const explained = explainStyleSheet({
+                foo: {
+                    '& div': {}
+                }
+            })
+
+            // should include empty selector scope into planner
+            expect(explained.tgs['.foo']).not.undefined
+            expect(Object.keys(explained.tgs['.foo'].tgs)).contain(' div')
+
+            // but never produce actual CSS for this scope
+            expect(renderExplained(explained)).eq('')
+
+        })
+
+    })
+
 })
