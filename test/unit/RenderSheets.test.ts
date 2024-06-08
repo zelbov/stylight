@@ -137,11 +137,11 @@ describe('Style rendering unit testing', () => {
 
     })
 
-    it('Render mixins from style objects: should contain references to global descriptors', () => {
+    it('Render literals from style objects: should contain references to global descriptors', () => {
 
         const styles = {
             foo: {
-                mixins: {
+                literals: {
                     body: { margin: 'none' }
                 }
             }
@@ -179,7 +179,7 @@ describe('Style rendering unit testing', () => {
         const sheet = renderStyleSheet({
             foo: {
 
-                mixins: {
+                literals: {
 
                     'h1&, h2&': {
 

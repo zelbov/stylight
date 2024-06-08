@@ -65,13 +65,13 @@ describe('MediaQueries unit testing', () => {
 
     })
 
-    describe('Mixins scoping inside media queries', () => {
+    describe('Literals scoping inside media queries', () => {
 
-        it('Render mixins within media query scope', () => {
+        it('Render literals within media query scope', () => {
 
             const sheet = renderStyleSheet({
 
-                mixins: {
+                literals: {
 
                     body: {
 
@@ -89,7 +89,7 @@ describe('MediaQueries unit testing', () => {
     
                         css: {
     
-                            mixins: {
+                            literals: {
     
                                 body: {
     

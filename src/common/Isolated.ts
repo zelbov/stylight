@@ -19,7 +19,7 @@ export const createStyleSheet = <T extends Object>(
 
     return {
         styles: theme,
-        styledClass: <T extends Object>(...keys: (keyof Omit<StyleSheetObject<T>, 'mixins'> | null | undefined | String)[]) => styledClass<T>(
+        styledClass: <T extends Object>(...keys: (keyof Omit<StyleSheetObject<T>, 'literals'> | null | undefined | String)[]) => styledClass<T>(
             ...(keys.map($ => typeof($) == 'string' ? seedAlgorithm($) : undefined))
         ),
         render: () => renderStyleSheet(theme, seedAlgorithm)

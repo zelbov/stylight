@@ -1,21 +1,25 @@
 import { assignSeedString, DEFAULT_SEED_FUNCTION, SeedFunction, SeedStringOrFunction } from "./Seed";
-import { ContainedCSSProperties, ContainedMixins, CSSProperties, KeyframesRule, KeyframesStepFromTo, KeyframesStepPercentage, MediaQuery, StyleSheetObject } from "./SheetTypings";
+import { ContainedCSSProperties, ContainedLiterals, CSSProperties, KeyframesRule, KeyframesStepFromTo, KeyframesStepPercentage, MediaQuery, StyleSheetObject } from "./SheetTypings";
 
 const BACKREF_UNAVAILABLE = (descriptor: string) => 'Parent scope reference requested for orphaned scope: '+descriptor
 const cssKeyExpr = new RegExp(/(^m(?=s))|([A-Z])/g)
 
-type RenderScopeType = 'element' | 'nested' | 'media' | 'mixins' | 'global'
+type RenderScopeType = 'element' | 'nested' | 'media' | 'literals' | 'global'
 
 type ScopedRenderContext = {
 
     // current scope
     cs: string
+    //backward reference to parent scope
     br: ScopedRenderContext | null
+
     type: RenderScopeType
-    // target scopes & their nested rules or inner scopes
+
+    // rendering targets scopes & their nested rules or inner scopes
     tgs: { [key: string]: ScopedRenderContext }
+
+    // container for css rules rendered as strings
     css?: string[]
-    //TODO: strinfigy method
 
 }
 
@@ -150,7 +154,7 @@ const traverseToHostDescriptor = (ctx: ScopedRenderContext) : string => {
             }
             break;
 
-        //TODO: case 'mixins'
+        //TODO: case 'literals'
 
     }
 
@@ -169,7 +173,7 @@ const prepareScopedRenderPlan = <T extends Object>(
 
         const contents = sheet[key as keyof(StyleSheetObject<T> | ContainedCSSProperties)]
 
-        // refuse to process undefined values e.g. forbidden "media" keyword inside "mixins" or global scope
+        // refuse to process undefined values e.g. forbidden "media" keyword inside "literals" or global scope
         if(!contents && contents !== 0) return;
 
         switch(true) {
@@ -196,17 +200,17 @@ const prepareScopedRenderPlan = <T extends Object>(
 
                 break;
 
-            case key == 'mixins':
+            case key == 'literals':
 
-                const mxScope = ctx.type == 'global' || ctx.type == 'mixins' ? ctx : traverseBackrefs(ctx!);
+                const mxScope = ctx.type == 'global' || ctx.type == 'literals' ? ctx : traverseBackrefs(ctx!);
 
-                (Object.keys(contents as ContainedMixins)).map(key => {
+                (Object.keys(contents as ContainedLiterals)).map(key => {
 
                     const target = key.replaceAll(/\&/g, ctx.cs),
                         scopeCtx = (mxScope.tgs as {[key: string]: ScopedRenderContext })[target] =
-                            prepareScopedRenderContext(target, 'mixins', mxScope)
+                            prepareScopedRenderContext(target, 'literals', mxScope)
 
-                    prepareScopedRenderPlan((contents as ContainedMixins)[key], scopeCtx, seed)
+                    prepareScopedRenderPlan((contents as ContainedLiterals)[key], scopeCtx, seed)
 
                 })
 

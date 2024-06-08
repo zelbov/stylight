@@ -1,6 +1,6 @@
 # Stylight: simple & reliable CSS-in-JS
 
-A feature-rich CSS-in-JS module for web UI development, with minimal overhead, designed for better developer experience, granularity and simplicity.
+A feature-rich CSS-in-JS module, with minimal overhead, designed for better developer experience, granularity and simplicity.
 
 ## Features and examples
 
@@ -164,17 +164,17 @@ renderStyleSheet(styles)
 ***
 </br>
 
-- Mixins: applying styles to global object descriptors
+- Literals: applying styles to top-level object descriptors instead of just class names
 
 ```JS
 
-// mixins.js
+// literals.js
 
 import { renderStyleSheet } from 'stylight'
 
 const styles = {
     foo: {
-        mixins: {
+        literals: {
             body: { margin: 'none' }
         }
     }
@@ -194,17 +194,17 @@ renderStyleSheet(styles)
 ***
 </br>
 
-- Mixins can be also combined with selectors nesting to use a nested target as a succeeding selector part, like this:
+- Literals can be also combined with selectors nesting to use a nested target as a succeeding selector part, like this:
 
 ```JS
 
-// nested_mixins.js
+// nested_literals.js
 
 import { renderStyleSheet } from 'stylight'
 
 const styles = {
     foo: {
-        mixins: {
+        literals: {
             'h1&, h2&': {
                 fontSize: '16px'
             }

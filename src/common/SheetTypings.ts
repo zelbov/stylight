@@ -57,12 +57,12 @@ export interface ContainedCSSProperties extends CSSProperties {
     atRules?: string[],
     keyframes?: KeyframesRule[],
     media?: MediaQuery[],
-    mixins?: ContainedMixins
+    literals?: ContainedLiterals
 }
 
-export type ContainedMixins = {
-    [key: string]: ContainedCSSProperties & { mixins?: never }
-} & { mixins?: never, media?: never }
+export type ContainedLiterals = {
+    [key: string]: ContainedCSSProperties & { literals?: never }
+} & { literals?: never, media?: never }
 
 type ContainedStyleSheet <T> = {
     [P in keyof T]?: ContainedCSSProperties;
@@ -70,5 +70,5 @@ type ContainedStyleSheet <T> = {
 
 export type StyleSheetObject<T> = 
 & ContainedStyleSheet<T> & {
-    mixins?: ContainedMixins
+    literals?: ContainedLiterals
 }

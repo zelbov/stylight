@@ -83,7 +83,7 @@ export const useStyle = <T extends Object>(
     if((source as StyleSheetInit<T>).styledClass)
         return (source as StyleSheetInit<T>).styledClass
 
-    return (...keys: (keyof Omit<StyleSheetObject<T>, 'mixins'> | null | undefined | String)[]) => styledClass(...keys)
+    return (...keys: (keyof Omit<StyleSheetObject<T>, 'literals'> | null | undefined | String)[]) => styledClass(...keys)
 
 }
 

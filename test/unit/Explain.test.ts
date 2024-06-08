@@ -120,11 +120,11 @@ describe('Explainer unit tests', () => {
 
     })
 
-    describe('Mixins definition planning & rendering', () => {
+    describe('Literals definition planning & rendering', () => {
 
         const explain = explainStyleSheet({
 
-            mixins: {
+            literals: {
 
                 body: {
 
@@ -138,14 +138,14 @@ describe('Explainer unit tests', () => {
 
         })
 
-        it('Explain mixins render plan: should consist of valid render context tree', () => {
+        it('Explain literals render plan: should consist of valid render context tree', () => {
 
-            expect(explain.tgs['body'].type).eq('mixins')
-            expect(explain.tgs['a'].type).eq('mixins')
+            expect(explain.tgs['body'].type).eq('literals')
+            expect(explain.tgs['a'].type).eq('literals')
             
         })
 
-        it('Render stylesheet containing mixins: should succeed & return valid CSS', () => {
+        it('Render stylesheet containing literals: should succeed & return valid CSS', () => {
 
             const css = renderExplained(explain)
 
@@ -162,7 +162,7 @@ describe('Explainer unit tests', () => {
 
                 border: 'none',
 
-                mixins: {
+                literals: {
 
                     body: { margin: '0' }
 
@@ -172,7 +172,7 @@ describe('Explainer unit tests', () => {
 
                     border: '1px solid #000',
 
-                    mixins: {
+                    literals: {
 
                         a: { textDecoration: 'none' }
 
@@ -183,14 +183,14 @@ describe('Explainer unit tests', () => {
             }
         })
 
-        it('Explain nested mixins render plan', () => {
+        it('Explain nested literals render plan', () => {
 
-            expect(explain.tgs['body'].type).eq('mixins')
-            expect(explain.tgs['a'].type).eq('mixins')
+            expect(explain.tgs['body'].type).eq('literals')
+            expect(explain.tgs['a'].type).eq('literals')
 
         })
 
-        it('Render stylesheets with nested mixins', () => {
+        it('Render stylesheets with nested literals', () => {
 
             const css = renderExplained(explainNested)
 
@@ -209,7 +209,7 @@ describe('Explainer unit tests', () => {
 
         const explain = explainStyleSheet({
 
-            mixins: {
+            literals: {
 
                 body: { atRules: ['@import (...font)'] }
 
@@ -391,23 +391,5 @@ describe('Explainer unit tests', () => {
         })
 
     })
-
-    /*
-    describe('Combined features planning & rendering', () => {
-
-        it('Explain mixins inside media queries')
-        it('Render mixins inside media queries: should not reach outside media query scope')
-
-        it('Explain media queries inside top-level mixins')
-        it('Render media queries inside top-level mixins: should migrate to global scope')
-
-        it('Explain styles inside nested mixins')
-        it('Render styles inside nested mixins')
-
-        it('Explain media queries inside nested mixins')
-        it('Render media queries inside nested mixins')
-
-    })
-    */
 
 })
