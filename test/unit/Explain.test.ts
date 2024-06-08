@@ -427,4 +427,24 @@ describe('Explainer unit tests', () => {
 
     })
 
+    describe('Lone literals', () => {
+
+        it('Define literals without actual class name scope: should plan & render', () => {
+
+            const plan = explainStyleSheet({
+
+                literals: {
+
+                    body: { margin: 0 }
+
+                }
+
+            })
+
+            expect(renderExplained(plan)).eq('body {margin:0}')
+
+        })
+
+    })
+
 })
