@@ -2,7 +2,7 @@
 
 This module supports CSS rendering out of the box, without any additional dependencies or plugins required. Neither it relies on or can switch to other renderers from other packages.
 
-A stylesheet output from renderer does not prettify an output, instead it always produces optimized CSS inliner. To prettify your rendered CSS, you should consider using other external packages like `prettier`
+A stylesheet renderer does not prettify an output, instead it always produces optimized CSS inliner. To prettify your rendered CSS, you should consider using other external packages like `prettier`
 
 To render a CSS-in-JS object into CSS stylesheet, we need to define it as one that complies with [`csstype`](https://www.npmjs.com/package/csstype) type definition (similar to what React's `style` property of a component does) and pass it to `renderStyleSheet` function.
 
@@ -25,7 +25,7 @@ renderStyleSheet(styles)
 */
 ```
 
-However, not only class names are used as property descriptors on a top level. There are few reserved keywords that are not allowed as class names, like `literals`, `media`, `keyframes`, `atRules` and `overrides`.
+Not only class names are used as property descriptors. There are also few reserved keywords that are not allowed as class names, like `literals`, `media`, `keyframes`, `atRules` and `overrides`.
 See documentation for usage the above keywords:
 
 - [Literals](./Literals.md)
@@ -34,9 +34,9 @@ See documentation for usage the above keywords:
 - [AtRules](./AtRules.md)
 - [CSS Property Overrides](./Overrides.md)
 
-Besides using only CSS properties definitions in a [selector scope](./Hierarchy.md), there is also recursive selectors support, quite similar to SCSS but in JS.
+Besides using only CSS properties definitions in a [selector scope](./Hierarchy.md#selector-scope), there is also recursive selectors support, quite similar to SCSS but in JS.
 
 See documentation for [nesting](./Nesting.md) to learn more about it.
 
 Keywords that are mentioned above are also applicable for actual style properties container besides just CSS properties definitions.
-It is highly recommended to see docs about [Hierarchy](./Hierarchy.md) to learn more from what's allowed and what's not.
+It is highly recommended to see docs about [Hierarchy](./Hierarchy.md) at the end of the day to learn more from what's allowed and what's not.

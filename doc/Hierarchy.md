@@ -2,7 +2,9 @@
 
 There are several features besides classical CSS-in-JS introduced with this package, but they also imply following specific conventional rules and abstract definitions.
 
-## A top-level definition of CSS-in-JS object is a `stylesheet`. The only thing that can be rendered by a built-in renderer is a stylesheet
+## Stylesheet
+
+### A top-level definition of CSS-in-JS object is a `stylesheet`. The only thing that can be rendered by a built-in renderer is a stylesheet
 
 Passing it's inner contents into renderer is not supported and will most likely break during render planning or render execution.
 
@@ -35,11 +37,15 @@ renderStyleSheet(not_a_sheet) // will fail
 
 ```
 
-## Every top-level property descriptor of defined stylesheet represents either a class name, or a keyword
+## Stylesheet properties
+
+### Every top-level property descriptor of defined stylesheet represents either a class name, or a keyword
 
 Nesting, CSS property definitions and other things besides class names and some keywords are not allowed at a top level stylesheet definition. They will produce type errors in case of using type checking, and either will not be included in render planner, or produce artifacts, or even break renderer execution. Further updates targeted on explicitly disallowing them during actual code execution will most likely never appear, for optimization reasons.
 
-## Every property descriptor that is not a functional keyword (further - `keyword`) is either a class name, a nesting target, or a CSS property
+## Keywords
+
+### Every property descriptor that is not a functional keyword (further - `keyword`) is either a class name, a nesting target, or a CSS property
 
 Examples of keywords are [`literals`](./Literals.md), [`media`](./MediaQueries.md), [`overrides`](./Overrides.md), [`keyframes`](./Keyframes.md) and [`atRules`](./AtRules.md).
 
@@ -61,7 +67,9 @@ const sheet = {
 
 Currently only one keyword that is allowed at a top level of a stylesheet is `literals`. Others are only allowed inside a selector scope.
 
-## An object passed as a property value described by a selector (class name or nested target) is a selector scope
+## Selector scope
+
+### An object passed as a property value described by a selector (class name or nested target) is a selector scope
 
 A selector scope is mainly a container for CSS properties definitions, but also allows nesting and keywords declarations.
 
@@ -91,7 +99,9 @@ const sheet = {
 
 ```
 
-## An object passed as a value described by a keyword is a keyword scope. A value type other than an object passed to keyword property is a keyword value
+## Keyword scope
+
+### An object passed as a value described by a keyword is a keyword scope. A value type other than an object passed to keyword property is a keyword value
 
 Currently an only available keyword scope is `literals` scope, since it accepts a single object as a value, while other keywords are used declare primitives, arrays of primitives, or arrays of other objects.
 
@@ -157,3 +167,9 @@ const sheet = createStyleSheet({
 })
 
 ```
+
+## Keyword value
+
+There are no strict common rules applied to value format for all keyword values supported, rather every keyword that defines a value can have it's own value format.
+
+For example, `media` keyword accepts array of objects of type `[{[mediarule: string]: {...stylesheet}}]`.

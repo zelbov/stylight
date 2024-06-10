@@ -4,22 +4,19 @@ A feature-rich CSS-in-JS module, with minimal overhead, designed for better deve
 
 ## Features
 
-- [Renders CSS-in-JS into CSS by itself](doc/Rendering.md)
-- [Selectors nesting](doc/Nesting.md)
-- [Property overrides](doc/Overrides.md)
-- [Literal CSS selectors support](doc/Literals.md)
-- [Isolation, obfuscation and class picking](doc/Stylesheets.md)
-- [Embeddable into React out of the box](doc/React.md)
-- [Convenient objects definition hierarchy](doc/Hierarchy.md)
+- [Renders CSS-in-JS into CSS by itself](https://github.com/zelbov/stylight/blob/main/doc/Rendering.md)
+- [Selectors nesting](https://github.com/zelbov/stylight/blob/main/doc/Nesting.md)
+- [Property overrides](https://github.com/zelbov/stylight/blob/main/doc/Overrides.md)
+- [Literal CSS selectors support](https://github.com/zelbov/stylight/blob/main/doc/Literals.md)
+- [Isolation, obfuscation and class picking](https://github.com/zelbov/stylight/blob/main/doc/Stylesheets.md)
+- [Embeddable into React out of the box](https://github.com/zelbov/stylight/blob/main/doc/React.md)
+- [Convenient objects definition hierarchy](https://github.com/zelbov/stylight/blob/main/doc/Hierarchy.md)
 
 ## Advantages
 
 - Made with Typescript; type completion friendly
-
 - Zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
-
 - Lightweight: minified bundle size is only around 4.4 KB, React integration plugin is about 2.5 KB of additional size.
-
 - Great performance. No more IDE lags during typechecks of simple stylings applied
 
 ## Installation
@@ -53,12 +50,15 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 
 There are two conditional requirements for this package to use.
 
-- `Typescript` >= `4.1` must be used by default for TS server in case of using type completion. A package reliaes upon [Template Literal Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html#template-literal-types) feature introduced in this version, so earlier versions of Typescript will most likely cause problems. However, for Javascript projects without type completion and type checks both in a project and IDE, no Typescript version requirements are applied.
+- `Typescript` >= `4.1` must be used by default for TS server in case of using type completion. A package relies on [Template Literal Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html#template-literal-types) feature introduced in this version, so earlier versions of Typescript will most likely cause problems. However, for Javascript projects without type completion and type checks both in a project and IDE, no Typescript version requirements are applied.
 - In case of using `React`, versions `16` and higher are considered supported since no tests for lower versions has been done. A package relies on React as an optional dependency only, in case React is actually used in a host project
+
+## License
+
+This product is being distributed for free and without any warranty. Copying, redistribution and modification of this code are not subjects to regulations, but including original links to initial version of this product within any redistribution is highly appreciated.
 
 ## TODO
 
-- Media queries ducomentation
 - Keyframes documentation
 - At-rules (other than just media queries + documentation)
 - Render planner documentation

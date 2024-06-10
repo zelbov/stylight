@@ -113,4 +113,35 @@ describe('MediaQueries unit testing', () => {
 
     })
 
+    describe('Media queries in literals', () => {
+
+        it('Render media query inside literal selector scope', () => {
+
+            const sheet = renderStyleSheet({
+
+                literals: {
+
+                    body: {
+
+                        media: [{
+
+                            "max-width": '400px',
+                            css: {
+                                margin: 0
+                            }
+
+                        }],
+
+                    },
+
+                }
+
+            })
+
+            expect(sheet).eq('@media (max-width:400px){body {margin:0}}')
+
+        })
+
+    })
+
 })

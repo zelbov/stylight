@@ -70,4 +70,4 @@ renderStyleSheet(styles)
 
 ```
 
-An `overrides` keyword is used within a [selector scope](./Hierarchy.md). It accepts an array of CSS property sets as a value. Multiple CSS properties within a single array item is allowed, which means we can define overrides for multiple CSS rules within a single CSS rules container as a single array item.
+An `overrides` keyword is used within a [selector scope](./Hierarchy.md#selector-scope). It accepts an array of CSS property sets as a value. Multiple CSS properties within a single array item are allowed, which means we can define overrides for multiple different CSS rules within a single CSS rules container as a single array item.

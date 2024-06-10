@@ -3,9 +3,9 @@
 React interopability is provided by this package out of the box, with a sufficient set of hooks and providers available.
 However, it is only included in a Node.js package by default. For external installation for web pages, see [front page](../README.md) for instructions on how to install a React plugin.
 
-Other web development frameworks such as Angular or Vue will most likely not officially be supported by this package itself, but distribution of third party plugins that will provide this kind of support is highly appreciated.
+Other web development frameworks such as Angular or Vue will most likely not officially be supported by this package, but distribution of third party plugins that will provide this kind of support is highly appreciated.
 
-Basic usage (shorthand):
+## Basic usage
 
 ```JSX
 
@@ -68,7 +68,7 @@ renderToString(<App/>)
 
 ```
 
-Extended usage (exposed context):
+## Extended usage (exposed context)
 
 ```JSX
 

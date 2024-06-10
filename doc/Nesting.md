@@ -57,8 +57,13 @@ renderStyleSheet(styles)
 
 */
 
-
 ```
+
+Nesting is only allowed within a [selector scope](./Hierarchy.md#selector-scope). Trying to define in in a [stylesheet scope](./Hierarchy.md#stylesheet) will result in type error and will either not be included in rendered CSS or produce artifacts.
+
+Also, nesting target declared as property descriptor within a class selector scope should always start with a `&`. For other scenarios like subsequent parent selectors, see example below.
+
+## Nesting with literals
 
 Nesting can also be used to pass parent selector as subsequent one. This is achievable by combining a nesting feature with [Literals](./Literals.md):
 

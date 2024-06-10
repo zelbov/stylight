@@ -33,7 +33,7 @@ In this scenario, whenever a UI component that instantiates a stylesheet initial
 
 This allows to augment any predetermined selector styles without traversing all the way to it's initialization boundaries and/or styling scope.
 
-Also, take a look at [nesting](./Nesting.md) documentation page where it is explained how it is possible to define subsequent parent selectors within a CSS rule using a combination with literals.
+Every selector styling defined within literals scope is a [selector scope](./Hierarchy.md#selector-scope), similar to one that is defined by class name, but uses literal selector as a property descriptor. However, it does not allow `literals` property if it has been declared within `literals` scope already, which means no chained/recursive literals scoping is allowed.
 
 Literals can also be defined independently in a top-level stylesheet scope, without a need for an actual class selector scope to be present in a stylesheet, like this:
 
@@ -63,3 +63,7 @@ renderStyleSheet(styles)
 
 
 ```
+
+It is not recommended to use class names for selectors that were already styled with this library, as literal selector definitions, as they could be a subject to [seeding](./Stylesheets.md#seeding-stylesheets).
+
+However, using literals inside selector scope defined by a class name, with further usage of nesting will allow that. Take a look at [nesting](./Nesting.md#nesting-with-literals) documentation page where it is explained how it is possible to define subsequent parent selectors within a CSS selector chain definition using a combination with literals.
