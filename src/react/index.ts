@@ -1,4 +1,5 @@
 import React, { useContext, createContext, useEffect, createElement } from 'react'
+import { DEFAULT_SEED_FUNCTION, SeedStringOrFunction, assignSeedString } from '../common/Seed';
 import { styledClass, renderStyleSheet, StyleSheetObject, StyleSheetInit } from 'stylight';
 
 const MISSING_RENDERING_CONTEXT_ERROR = 'Need to instantiate top-level StyleRenderingContext.Provider'
@@ -29,17 +30,17 @@ class StyleContextListener extends EventTarget {
         this._renderedFlags = [];
     }
 
-    private _sources: (StyleSheetObject<any> | StyleSheetInit<any>)[]
+    private _sources: { styles: (StyleSheetObject<any> | StyleSheetInit<any>), seed?: SeedStringOrFunction }[]
 
     public get sources() { return this._sources }
 
     private _renderedFlags: boolean[];
 
-    addStyles(styles: StyleSheetObject<any> | StyleSheetInit<any>){
+    addStyles(styles: StyleSheetObject<any> | StyleSheetInit<any>, seed?: SeedStringOrFunction){
         if(!this._sources.find($ => $ === styles)) {
-            this._sources.push(styles)
+            this._sources.push({styles, seed})
             this._renderedFlags.push(false)
-            this.dispatchEvent(new StyleRenderEvent(styles))
+            this.dispatchEvent(new StyleRenderEvent(styles, seed))
         }
     }
 
@@ -48,10 +49,12 @@ class StyleContextListener extends EventTarget {
 class StyleRenderEvent extends Event {
 
     private _source: StyleSheetObject<any> | StyleSheetInit<any>
+    private _seed?: SeedStringOrFunction
 
-    constructor(source: StyleSheetObject<any> | StyleSheetInit<any>){
+    constructor(source: StyleSheetObject<any> | StyleSheetInit<any>, seed?: SeedStringOrFunction){
         super('style')
         this._source = source
+        this._seed = seed
     }
 
     public get source() { return this._source }
@@ -71,14 +74,15 @@ export const createStyleRenderingContext = () => {
 export const StyleRenderingContext = createContext<StyleRenderingContextValue | null>(null)
 
 export const useStyle = <T extends Object>(
-    source: StyleSheetObject<T> | StyleSheetInit<T>
+    source: StyleSheetObject<T> | StyleSheetInit<T>,
+    seed: SeedStringOrFunction = DEFAULT_SEED_FUNCTION
 ) => {
 
     const ctx = useContext(StyleRenderingContext)
 
     if(!ctx) throw new Error(MISSING_RENDERING_CONTEXT_ERROR)
 
-    ctx.target.addStyles(source)
+    ctx.target.addStyles(source, seed)
 
     if((source as StyleSheetInit<T>).styledClass)
         return (source as StyleSheetInit<T>).styledClass
@@ -103,7 +107,10 @@ export const StyleRenderer = (props: StyleRendererProps) => {
     const { wrap } = props
 
     const styles = ctx.target.sources.map(
-            (source) => (source.styles && source.styledClass) ? (source as StyleSheetInit<any>).render() : renderStyleSheet(source)
+            ({ styles, seed }) => 
+                (styles && styles.styledClass)
+                ? (styles as StyleSheetInit<any>).render()
+                : seed ? renderStyleSheet(styles, typeof(seed) == 'string' ? assignSeedString(seed) : seed) : renderStyleSheet(styles)
         ).join('')
 
     useEffect(() => {

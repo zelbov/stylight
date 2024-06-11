@@ -66,7 +66,36 @@ describe('ReactUseStyle hook param variations testing', () => {
 
         console.log(result)
 
-        expect(result).contain('.'+btoa('seedfoo'))
+        expect(result).contain('.'+Buffer.from('seedfoo').toString('base64'))
+        expect(result).contain('margin:0')
+
+    })
+
+    it('Pass seed into useStyle hook: should apply to rendered styles and class picker output', () => {
+
+        const Component = () => {
+
+            const styled = useStyle({
+                foo: { margin: 0 }
+            }, 'seed')
+
+            return <div className={styled('foo')}></div>
+
+        }
+
+        const App = () => <Styled>
+
+            <Component/>
+
+            <StyleRenderer/>
+
+        </Styled>
+
+        const result = renderToString(<App/>)
+
+        console.log(result)
+
+        expect(result).contain('.'+Buffer.from('seedfoo').toString('base64'))
         expect(result).contain('margin:0')
 
     })
