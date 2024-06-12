@@ -8,11 +8,13 @@ jobs:
 
   test-node:
     # Install node dependencies and run tests
-    executor: node/default
+    docker:
+      - image: cimg/node:18.20-browsers
     environment:
       - CHROME_BIN: /usr/bin/google-chrome
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - node/install-packages:
           pkg-manager: npm
@@ -22,7 +24,8 @@ jobs:
 
   build-node:
     # Build node project
-    executor: node/default
+    docker:
+      - image: cimg/node:18.20
     steps:
       - checkout
       - node/install-packages:
