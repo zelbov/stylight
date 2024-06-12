@@ -6,7 +6,8 @@
         "baseUrl": ".",
         "paths": {
             "stylight": ["./src/index.ts"],
-            "stylight/react": ["./src/react/index.ts"]
+            "stylight/react": ["./src/react/index.ts"],
+            "react": [ "./node_modules/@types/react" ]
         },
         "strict": true,
         "removeComments": false,
@@ -26,5 +27,11 @@
         "jsx": "react"
     },
     "include": ["./src", "./test"],
-    "exclude": ["dist", "node_modules", ".trash", "./src/umd.ts", "./src/react/umd.ts"]
+    "exclude": [
+        "dist", "node_modules", ".trash",
+        "./src/umd.ts", "./src/react/umd.ts",
+        "./test/browser",
+        "test/browser-entrypoint.tsx",
+        "test/karma.conf.js"
+    ]
 }
