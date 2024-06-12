@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5
+  browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
 
@@ -11,6 +12,7 @@ jobs:
     environment:
       - CHROME_BIN: /usr/bin/google-chrome
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - node/install-packages:
           pkg-manager: npm
