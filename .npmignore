@@ -1,3 +1,4 @@
+/.circleci
 /src
 /test
 /dist/test/
