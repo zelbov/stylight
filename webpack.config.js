@@ -124,6 +124,8 @@ module.exports = function(env, args) {
                 path: false,
                 fs: false,
                 util: require.resolve('util'),
+                stream: require.resolve('stream-browserify'),
+                buffer: require.resolve('buffer'),
 
             },
 
@@ -136,6 +138,7 @@ module.exports = function(env, args) {
             
             new webpack.ProvidePlugin({
                 process: 'process/browser',
+                Buffer: ['buffer', 'Buffer']
             }),
 
         ]
