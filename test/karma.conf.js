@@ -1,11 +1,14 @@
 // Karma configuration
 
 module.exports = function(config) {
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '../dist/test',
 
+    // pass shell args into client
+    client: { args: process.argv },
 
     // frameworks to use
     // available frameworks: https://www.npmjs.com/search?q=keywords:karma-adapter
