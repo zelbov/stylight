@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { StyleRenderer, Styled, useStyle } from 'stylight/react'
+import { observeRenderOnce } from './utils/ObserveRenders'
 
 describe('Basic functions browser tests', () => {
 
@@ -45,8 +46,7 @@ describe('Basic functions browser tests', () => {
 
         root.render(<App/>)
 
-        // wait for render process to finish asynchronously
-        await new Promise(r => setTimeout(r, 1))
+        await observeRenderOnce(container)
 
         console.log(container.innerHTML)
 
