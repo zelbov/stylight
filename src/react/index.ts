@@ -87,7 +87,11 @@ export const useStyle = <T extends Object>(
     if((source as StyleSheetInit<T>).styledClass)
         return (source as StyleSheetInit<T>).styledClass
 
-    return (...keys: (keyof Omit<StyleSheetObject<T>, 'literals'> | null | undefined | String)[]) => styledClass(...keys)
+    const seedAlgorithm = typeof(seed) == 'string' ? assignSeedString(seed) : seed
+
+    return (...keys: (keyof Omit<StyleSheetObject<T>, 'literals'> | null | undefined | String)[]) => styledClass(...(
+        keys.map($ => typeof($) == 'string' ? seedAlgorithm($) : undefined)
+    ))
 
 }
 
