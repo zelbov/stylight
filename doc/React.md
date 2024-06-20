@@ -72,9 +72,9 @@ renderToString(<App/>)
 
 ## useStyle hook
 
-Basically `useStyle` hook is a React-oriented version of [`createStyleSheet`](./Stylesheets.md#creating-stylesheets-and-type-completion) call, but only returns a class picker with type completion support. Composing and rendering styles is handled by top-level rendering context and an actual renderer component `StyleRenderer`.
+Basically `useStyle` hook is a React-oriented version of [`createStyleSheet`](./Stylesheets.md#creating-stylesheets-and-type-completion) call, but only returns a class picker with type completion support. Styles composition and rendering are handled by top-level rendering context and a renderer component `StyleRenderer`.
 
-Also, stylesheets passed into rendering context with this call are assigned with their unique identifiers in a list, and support automatic correction of a styles tree in case of using hydration and frequent re-renders (e.g. combining Helmet with lazy components).
+Also, stylesheets passed into rendering context with this call are assigned with their unique identifiers in a list, and support automatic correction of a styles tree in case of using hydration and frequent/eventual re-renders (e.g. when combined with Helmet, React.lazy or implementation of theme switches).
 
 A retuned class picker accepts multiple parameters of string type, implying that an actual element could contain multiple class names, and typechecking of passed parameters is not strictly limited to property descriptors used in a stylesheet.
 
@@ -101,6 +101,8 @@ const StyledParent = () => {
 
 }
 
+let idx = 0
+
 const StyledChild = (props) => {
 
     const styled = useStyle({
@@ -112,9 +114,10 @@ const StyledChild = (props) => {
         styled(
             // type completion is supported for 'child' parameter value, 
             'child',
-            // but inheriting class names from higher level components 
-            // or arbitrary strings / nullish values are also allowed
-            props.className, null
+            // but inheriting class names from higher level components is also allowed
+            props.className,
+            // arbitrary strings, conditional strings and nullish values are also allowed
+            idx++ % 2 ? 'odd' : null
         )
     }></div>
     
@@ -135,7 +138,7 @@ renderToString(<App/>)
 (pretty)
 
 <div class="child inheritedParentStyles"></div>
-<style type="text/css" data-hydrate-idx="0">
+<style type="text/css" data-uid="0">
     .inheritedParentStyles {margin:0}
     .child {border:1px solid #000}
 </style>
@@ -144,7 +147,17 @@ renderToString(<App/>)
 
 ```
 
-This hook also accepts a second parameter for [seeding](./Stylesheets.md#seeding-stylesheets).
+This hook also accepts a second `options` parameter as an object with following properties:
+
+- [`seed`](./Stylesheets.md#seeding-stylesheets): provide a seed for class selector
+- `mutate`: define a condition by which an asynchronously loaded stylesheet will mutate.
+
+By default, all stylesheets defined within a component tree using `useStyle` hook are immutable, which means they will never get updated upon styled component re-render, unless a mutation condition is explicitly defined. This allows for implementation of conditional theme switches, while at the same reduces performance overhead during hydration when it is not necessary:
+_TBD: code sample_
+
+Styles that were initially rendered by `StyleRenderer` during first (synchronous) page render will never mutate at their place. Instead, mutations of those styles will be performed by duplicating them and appending as overrides. This is due to first page render composes all styles used in a synchronously rendered tree into a single styles container within a single `<style>` tag, while asynchronously rendered or mutated styles are passed into their own distinct tags, and so they can be mutated separately without re-rendering a whole set of all styles that were ever detected during application renders.
+
+However, multiple mutations of the same stylesheet will not produce duplicate distinct styles in a DOM tree, instead it will mutate the same distinct style tag related to same stylesheet definition in within a component. Same applies to styles instantiated within asynchronously rendered components.
 
 ## Helmet
 
@@ -190,7 +203,7 @@ helmet.style.toString()
 /*
 
 (pretty)
-<style data-react-helmet="true" type="text/css" data-hydrate-idx="0">
+<style data-react-helmet="true" type="text/css" data-uid="0">
     .obj {border:1px solid #000}
 </style>
 
@@ -263,8 +276,8 @@ will produce the following (pretty):
 <head>
 
     <title>Helmet Test</title>
-    <style type="text/css" data-hydrate-idx="0" data-react-helmet="true">.obj {border:1px solid #000}</style>
-    <style data-hydrate-idx="1">.obj2 {border:none}</style>
+    <style type="text/css" data-uid="0" data-react-helmet="true">.obj {border:1px solid #000}</style>
+    <style data-uid="1">.obj2 {border:none}</style>
 
 </head>
 
@@ -286,19 +299,12 @@ As we can see here, no additional workarounds for asynchrounous styled component
 Every stylesheet passed to `useStyle` hook will be rendered into CSS inliner wrapped with `<style>` tag using `<StyleRenderer/>` component.
 A render process is synchronous and is called over those stylesheets that were already instantiated within previously rendered nodes.
 
-However, in a browser, when styles are being added asynchrounously after first page render (e.g. conditionally, depending on state values changed on state update, or using `React.lazy`, or `useEffect`), a renderer will accept them and append them to the queue of rendered styles if they do not belong to any components that were previously requested to render their styles already. They will also appear after initial `<style>` tag produced by first render wrapped within their own `<style>` tags each, and have `data-hydrate-idx` property assigned to each tag, identifying them among other styles and excluding from further duplication upon re-render.
+However, in a browser, when styles are being added asynchrounously after first page render (e.g. conditionally, depending on state values changed on state update, or using `React.lazy`, or `useEffect`), a renderer will accept them and append them to the queue of rendered styles if they do not belong to any components that were previously requested to render their styles already. They will also appear after initial `<style>` tag produced by first render wrapped within their own `<style>` tags each, and have `data-uid` property assigned to each tag, identifying them among other styles and excluding from further duplication upon re-render.
 
 For example, if we update a state of a component that has an unconditional styling applied with `useStyle` hook, a renderer will not produce a duplicate of this stylesheet. This is achieved by `StyleRenderingContext` internal listener's behaviour by default. This does not work with `react-dom/server` though, as it will still produce duplicate styles if a page instance is being rendered multiple times.
 
 When styles are generated conditionally, they will be replaced within a style rendering area accordingly. This allows using theme switches:
-
-```JS
-
-
-```
-
-// WRONG
-Be careful with modifying/generating your stylesheets conditionally, e.g. depending on some state values, though, as when stylesheets were already passed within a certain component initalization scope, they will not receive any updates if stylesheet contents will eventually change. Consider separating these hooks by different component wraps and rendering these components according to your conditions instead.
+_TBD: code sample_
 
 ## StyleRendererContext explained
 

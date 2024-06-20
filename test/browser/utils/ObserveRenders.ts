@@ -18,7 +18,7 @@ export const observeRenderOnce = (target: Node, options: MutationObserverInit = 
 
 }
 
-export const observeRendersDuring = (ms: number, target: Node)
+export const observeRendersDuring = (ms: number, target: Node, options: MutationObserverInit = { childList: true })
 : Promise<MutationRecord[]> => {
 
     return new Promise((resolve) => {
@@ -38,7 +38,51 @@ export const observeRendersDuring = (ms: number, target: Node)
 
         }, ms)
 
-        observer.observe(target)
+        observer.observe(target, options)
+        
+    })
+
+}
+
+const OBSERVE_UNTIL_TIMEOUT = 5_000;
+
+export const observeRendersUntil = (target: Node, callback: (node: Node) => boolean, options: MutationObserverInit = { childList: true }) => {
+
+    return new Promise<MutationRecord[]>((resolve, reject) => {
+
+        let records: MutationRecord[] = [], resolved = false
+
+        const match = () => {
+
+            observer.disconnect()
+            resolved = true
+            setTimeout(() => resolve(records), 1)
+
+        }
+
+        const observer = new MutationObserver((updates) => {
+
+            records.push(...updates)
+            updates.map(u => {
+
+                u.addedNodes.forEach(n => {
+                    callback(n) ? match() : null
+                })
+                u.removedNodes.forEach(n => {
+                    callback(n) ? match() : null
+                })
+
+            })
+
+        })
+
+        observer.observe(target, options)
+
+        setTimeout(() =>
+            !resolved ? reject(new Error('Timeout of '+OBSERVE_UNTIL_TIMEOUT+' reached while waiting until target node updates'))
+            : null,
+            OBSERVE_UNTIL_TIMEOUT
+        )
         
     })
 

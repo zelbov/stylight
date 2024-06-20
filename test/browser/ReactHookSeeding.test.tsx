@@ -49,7 +49,7 @@ describe('ReactHookSeeding tests', () => {
 
             const styled = useStyle({
                 foo: { margin: 0 }
-            }, 'seed!')
+            }, { seed: 'seed!' })
 
             return <div className={styled('foo')}></div>
 

@@ -6,25 +6,6 @@ import { observeRenderOnce } from './utils/ObserveRenders'
 
 describe('Basic functions browser tests', () => {
 
-    it('Test suite warmup', async function () {
-
-        const App = () => <span>Hello, World!</span>
-
-        const container = document.createElement('div')
-
-        const root = createRoot(container)
-
-        root.render(<App/>)
-
-        // wait for render process to finish asynchronously
-        await new Promise(r => setTimeout(r, 1))
-
-        console.log(container.innerHTML)
-
-        expect(container.innerHTML).eq('<span>Hello, World!</span>')
-    
-    })
-
     it('Render full React node tree of basic styling: should succeed and produce valid output', async function () {
 
         const Component = () => {
@@ -51,7 +32,7 @@ describe('Basic functions browser tests', () => {
         console.log(container.innerHTML)
 
         expect(container.innerHTML).eq(
-            '<div class="foo">Hello, World!</div><style type="text/css" data-hydrate-idx="0">.foo {margin:0}</style>'
+            '<div class="foo">Hello, World!</div><style type="text/css" data-uid="-1">.foo {margin:0}</style>'
         )
 
     })

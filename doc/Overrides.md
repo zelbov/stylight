@@ -1,6 +1,6 @@
 # Property overrides
 
-JS is not meant to have same property descriptor for different properties, but CSS is.
+JS is not meant to have same property descriptor for variety of property values, but CSS is.
 A workaround for this in Stylight is to use `property overrides`:
 
 ```JS
