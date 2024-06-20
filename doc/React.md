@@ -152,12 +152,12 @@ This hook also accepts a second `options` parameter as an object with following 
 - [`seed`](./Stylesheets.md#seeding-stylesheets): provide a seed for class selector
 - `mutate`: define a condition by which an asynchronously loaded stylesheet will mutate.
 
-By default, all stylesheets defined within a component tree using `useStyle` hook are immutable, which means they will never get updated upon styled component re-render, unless a mutation condition is explicitly defined. This allows for implementation of conditional theme switches, while at the same reduces performance overhead during hydration when it is not necessary:
+By default, all stylesheets defined within a component tree using `useStyle` hook are immutable, which means they will never get updated upon styled component re-render, unless a mutation condition is explicitly defined. This allows for implementation of conditional theme switches, while at the same time reduces performance overhead during hydration when it is not necessary:
 _TBD: code sample_
 
-Styles that were initially rendered by `StyleRenderer` during first (synchronous) page render will never mutate at their place. Instead, mutations of those styles will be performed by duplicating them and appending as overrides. This is due to first page render composes all styles used in a synchronously rendered tree into a single styles container within a single `<style>` tag, while asynchronously rendered or mutated styles are passed into their own distinct tags, and so they can be mutated separately without re-rendering a whole set of all styles that were ever detected during application renders.
+Styles that were initially rendered by `StyleRenderer` during first (synchronous) page render will never mutate at their place. Instead, mutations of those styles will be performed by duplicating them and appending to DOM tree as overrides. This is due to first page render composes all styles used in a synchronously rendered tree into a single styles container within a single `<style>` tag, while asynchronously rendered or mutated styles are passed into their own distinct tags, and so they can be mutated separately without re-rendering a whole set of all styles that were ever detected during application renders.
 
-However, multiple mutations of the same stylesheet will not produce duplicate distinct styles in a DOM tree, instead it will mutate the same distinct style tag related to same stylesheet definition in within a component. Same applies to styles instantiated within asynchronously rendered components.
+However, multiple asynchronous mutations of the same stylesheet will not produce duplicate distinct styles in a DOM tree, instead it will mutate the same distinct style tag related to same stylesheet definition in within a component. Same applies to styles instantiated within asynchronously rendered components.
 
 ## Helmet
 
@@ -197,13 +197,13 @@ renderToString(<App/>) /* <div class="obj"></div> */
 const helmet = Helmet.renderStatic()
 
 helmet.title.toString()
-/* <title data-react-helmet="true">Helmet Test #2</title> */
+/* <title data-react-helmet="true">Helmet Test</title> */
 
 helmet.style.toString()
 /*
 
 (pretty)
-<style data-react-helmet="true" type="text/css" data-uid="0">
+<style data-react-helmet="true" type="text/css" data-uid="-1">
     .obj {border:1px solid #000}
 </style>
 
