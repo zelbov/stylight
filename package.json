@@ -1,6 +1,6 @@
 {
   "name": "stylight",
-  "version": "0.5.8",
+  "version": "0.5.8rev2",
   "description": "A CSS-In-JS module that's been made as simple as we probably wanted",
   "main": "./dist/src/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "watch": "npx tsc --watch & npx webpack --config ./webpack.config.js --mode=development --watch",
     "lint": "npx eslint --ext ts",
     "clean": "rm -rf ./dist && rm -rf ./umd",
-    "prep": "npm run clean && npm i && npm run build && npm run bundle-dev",
+    "prep": "npm run clean && npm i && npm run bundle-dev && npm run build",
     "test:browser": "npx karma start test/karma.conf.js",
     "test:node": "npx mocha -r source-map-support/register -r module-alias/register ./dist/test/{unit,integration}/*.js --no-deprecation",
     "test": "npm run build && npm run test:node && npm run test:browser"
