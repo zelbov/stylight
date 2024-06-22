@@ -16,7 +16,7 @@ A feature-rich CSS-in-JS module, with minimal overhead, designed for better deve
 
 - Made with Typescript; type completion friendly
 - Zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
-- Lightweight: minified bundle size is only around 4.4 KB, React integration plugin is about 2.5 KB of additional size.
+- Lightweight: minified bundle size is only ![stylight.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.8/umd/stylight.min.js), React integration plugin is ![stylight.react.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.8/umd/stylight.react.min.js)
 - Great performance. No more IDE lags during typechecks of simple stylings applied
 
 ## Installation
