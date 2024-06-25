@@ -16,7 +16,7 @@ A feature-rich CSS-in-JS module, with minimal overhead, designed for better deve
 
 - Made with Typescript; type completion friendly
 - Zero-dependency: The only dependency is an actual `'csstype'` module which is only a typedef package that does not affect bundle sizes at all.
-- Lightweight: minified bundle size is only ![stylight.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.8/umd/stylight.min.js), React integration plugin is ![stylight.react.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.8/umd/stylight.react.min.js)
+- Lightweight: minified bundle size is only ![stylight.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.9/umd/stylight.min.js), React integration plugin is ![stylight.react.min.js size](https://img.badgesize.io/https://unpkg.com/stylight@0.5.9/umd/stylight.react.min.js)
 - Great performance. No more IDE lags during typechecks of simple stylings applied
 
 ## Installation
@@ -34,11 +34,11 @@ This will provide `stylight` core package with plugins included, e.g. `stylight/
 ```HTML
 
 <!-- core package -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.8/umd/stylight.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.9/umd/stylight.min.js"></script>
 <!-- will provide Stylight UMD global -->
 
 <!-- React plugin -->
-<script type="text/javascript" src="https://unpkg.com/stylight@0.5.8/umd/stylight.react.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/stylight@0.5.9/umd/stylight.react.min.js"></script>
 <!-- will provide StylightReact UMD global -->
 
 
