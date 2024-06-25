@@ -45,6 +45,27 @@ describe('Seeding unit testing', () => {
 
         })
 
+        it('Use class picker with arbitrary classes: should not seed them', () => {
+
+            const parentSheet = createStyleSheet({
+                    inheritStyle: { margin: 0 }
+                }, 'parent'),
+                childSheet = createStyleSheet({
+                    child: { margin: 0 }
+                }, 'child')
+
+            const parentClass = parentSheet.styledClass('inheritStyle'),
+                childClass = childSheet.styledClass('child', parentClass, 'arbitrary')
+
+            expect(childClass)
+                .eq(`${
+                    Buffer.from('childchild').toString('base64')
+                } ${
+                    Buffer.from('parentinheritStyle').toString('base64')
+                } arbitrary`)
+
+        })
+
     })
 
     describe('Isolated sheets with custom seed function', () => {

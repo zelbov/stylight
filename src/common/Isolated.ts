@@ -11,18 +11,24 @@ export type StyleSheetInit<T extends Object> = {
 }
 
 export const createStyleSheet = <T extends Object>(
-    theme: StyleSheetObject<T>,
+    source: StyleSheetObject<T>,
     seed: SeedStringOrFunction = DEFAULT_SEED_FUNCTION
 ) : StyleSheetInit<T> => {
 
     const seedAlgorithm = typeof(seed) == 'string' ? assignSeedString(seed) : seed
 
     return {
-        styles: theme,
+        styles: source,
         styledClass: <T extends Object>(...keys: (keyof Omit<StyleSheetObject<T>, 'literals'> | null | undefined | String)[]) => styledClass<T>(
-            ...(keys.map($ => typeof($) == 'string' ? seedAlgorithm($) : undefined))
+            ...(
+                keys.map(
+                    $ => typeof($) == 'string'
+                        ? Object.keys(source).indexOf($) != -1 ? seedAlgorithm($) : $
+                        : undefined
+                    )
+            )
         ),
-        render: () => renderStyleSheet(theme, seedAlgorithm)
+        render: () => renderStyleSheet(source, seedAlgorithm)
     }
 
 }
