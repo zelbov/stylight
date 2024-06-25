@@ -34,7 +34,7 @@ Stylesheets instantiated with `createStyleSheet` call also support seeding, whic
 
 ```JS
 
-import { createStyleSheet, styledClass } from 'stylight'
+import { createStyleSheet } from 'stylight'
 
 const { styledClass, render } = createStyleSheet(
     // stylesheet properties
@@ -74,7 +74,7 @@ By default, seeding algorithm for a passed seed of string type is `btoa(seed+cla
 
 ```JS
 
-import { createStyleSheet, styledClass } from 'stylight'
+import { createStyleSheet } from 'stylight'
 
 const { styledClass, render } = createStyleSheet(
     // stylesheet properties

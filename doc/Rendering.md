@@ -34,7 +34,7 @@ See documentation for usage the above keywords:
 - [AtRules](./AtRules.md)
 - [CSS Property Overrides](./Overrides.md)
 
-Besides using only CSS properties definitions in a [selector scope](./Hierarchy.md#selector-scope), there is also recursive selectors support, quite similar to SCSS but in JS.
+Besides using only CSS properties definitions in a [selector scope](./Hierarchy.md#selector-scope), there is also chained selectors support, quite similar to SCSS but in JS.
 
 See documentation for [nesting](./Nesting.md) to learn more about it.
 
